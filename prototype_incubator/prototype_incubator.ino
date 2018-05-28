@@ -185,16 +185,15 @@ void loop() {
  
   /*PID for temputature*/
   double gap = abs(Setpoint-Input); //distance away from setpoint
-  if(gap<0.5)
-  {  //we're close to setpoint, use conservative tuning parameters
+  if(gap<1) { //we're close to setpoint, use conservative tuning parameters
     myPID.SetTunings(consKp, consKi, consKd);
-  }
-  else
-  {
+    }
+  else {
      //we're far from setpoint, use aggressive tuning parameters
      myPID.SetTunings(aggKp, aggKi, aggKd);
-  }
+    }
 
+  myPID.SetControllerDirection(REVERSE);
   myPID.Compute();
   analogWrite(peltier,Output);
   /* for debugging PID */
@@ -202,6 +201,8 @@ void loop() {
   Serial.print("PWM input = "); Serial.println(Input);
   Serial.print("PWM output = "); Serial.println(Output);
   Serial.println();
-    
+
+  // analogWrite(peltier, 255);
+  
   delay(2000);
 }
