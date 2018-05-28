@@ -1,0 +1,14 @@
+{
+  "name": "raspberry_pi",
+  "version": "0.0.1",
+  "description": "Display and store incubator stats",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
