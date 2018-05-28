@@ -1,45 +1,51 @@
-#include <PID_v1.h>
-#include <Arduino.h>
-#include <Wire.h>
+#include <PID_v1.h>               // library for the PID
 #include "Adafruit_SHT31.h"       // library for the tempurature sensor
 #include <Adafruit_Sensor.h>      // unified sensor library
 #include <Adafruit_TSL2561_U.h>   // library for the light sensor
-#include <SPI.h>
-#include <SD.h>
-#include <Time.h>
-#include <DS1302.h>
+#include <SPI.h>                  // library for the pins the SD card is using
+#include <SD.h>                   // library for the SD card
+#include <Wire.h>
+#include "RTClib.h"               // library for the RTC
 
+/* Set the appropriate digital I/O pin connections. These are the pin */
 
 const int chipSelect = 10; // set the pin for the SD card
 
-const int lights = 5;   // PWM pin for the lights
-const int peltier = 3;  // PWM pin for the peltier
-const int fan = 6;      // PWM pin for the fan
+const int lights = 4;   // PWM pin for the lights
+const int peltier = 5;  // PWM pin for the peltier
+const int fan = 3;      // PWM pin for the fan
 
+/* define the sensors */
+
+RTC_PCF8523 rtc;                                                                        // name the clock
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);     // name the lux sensor
 Adafruit_SHT31 sht31 = Adafruit_SHT31();                                                // name the temp sensor
 
-DS1302 rtc(9,8,7);  // set the pins for the clock
+// char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+/* The array os string used to store the data as it comes from the sensors */
 
-//Define Variables we'll be connecting to
+/* PID variables and constants */
 double Setpoint, Input, Output;
 
 //Define the aggressive and conservative Tuning Parameters
-double aggKp=4, aggKi=0.2, aggKd=1;
-double consKp=1, consKi=0.05, consKd=0.25;
+const double aggKp=4, aggKi=0.2, aggKd=1;
+const double consKp=1, consKi=0.05, consKd=0.25;
 
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
 
-int adjustlux = 50;
+/* Setpoints */
+
+const int luxSet = 50;
+const int tempSet = 18;
 
 /**************************************************************************/
 /*
     Configures the gain and integration time for the TSL2561
 */
 /**************************************************************************/
-void configureSensor(void)
-{
+void configureLux(void)
+{ 
   /* You can also manually set the gain or enable auto-gain support */
   // tsl.setGain(TSL2561_GAIN_1X);      /* No gain ... use in bright light to avoid sensor saturation */
   // tsl.setGain(TSL2561_GAIN_16X);     /* 16x gain ... use in low light to boost sensitivity */
@@ -49,14 +55,23 @@ void configureSensor(void)
   // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);      /* fast but low resolution */
   tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_101MS);  /* medium resolution and speed   */
   // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);  /* 16-bit data but slowest conversions */
-
-  /* Update these values depending on what you've set above! */  
-  Serial.println("----------------------------------");
-  Serial.print  ("Gain:         "); Serial.println("Auto");
-  Serial.print  ("Timing:       "); Serial.println("13 ms");
-  Serial.println("----------------------------------");
 }
 
+void configureSD() {
+  // see if the card is present and can be initialized:
+  if (!SD.begin(chipSelect)) {
+    Serial.println("Card failed, or not present");
+    // don't do anything more:
+    while (1);
+  }
+}
+
+String timeString() {
+  DateTime now = rtc.now();
+  char buffer[18];
+  snprintf(buffer, 18, "%04d%02d%02d_%02d:%02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+  return buffer;
+}
 /**************************************************************************/
 /*
     Setup code
@@ -66,30 +81,23 @@ void configureSensor(void)
 void setup() {
 
   /* set up the output pins */
+
   pinMode(lights, OUTPUT);
   pinMode(peltier, OUTPUT);
   pinMode(fan, OUTPUT);
 
-  /* set up the sensor and logger */
+  /* set up serial */
   Serial.begin(9600);
 
   while (!Serial)
     delay(10);     // will pause Zero, Leonardo, etc until serial console opens
 
-  Serial.println("SHT31 test"); Serial.println("");
+  /* set up temp sensor */
   if (! sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
     Serial.println("Couldn't find SHT31");
     while (1) delay(1);
   }
-  
-  /* Setup the sensor gain and integration time */
-  sensor_t sensor;
-  tsl.getSensor(&sensor);
-  delay(500);
-  configureSensor();
 
-  Serial.println("Light Sensor Test"); Serial.println("");
-  
   /* Initialise the lux sensor */
   //use tsl.begin() to default to Wire, 
   //tsl.begin(&Wire2) directs api to use Wire2, etc.
@@ -99,35 +107,25 @@ void setup() {
     Serial.print("Ooops, no TSL2561 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
-    
-  /* We're ready to go! */
-  Serial.println("----------------------------------");
-    
-  Serial.print("Initializing SD card...");
+  
+  /* Setup the lux sensor gain and integration time */
+  configureLux();
+        
+  /* Setup the SD card */
+  configureSD();
 
-  // see if the card is present and can be initialized:
-  if (!SD.begin(chipSelect)) {
-    Serial.println("Card failed, or not present");
-    // don't do anything more:
-    while (1);
-  }
-  Serial.println("card initialized.");
-  Serial.println("");
-  Serial.println("----------------------------------");
+  /*Display the time for sanity*/
+  DateTime now = rtc.now();
+  Serial.print("The clock is set to: "); Serial.print(now.hour()); Serial.print(':'); Serial.print(now.minute()); Serial.print(':'); Serial.print(now.second());
+  Serial.print(" on "); Serial.print(now.year(), DEC); Serial.print('/'); Serial.print(now.month(), DEC); Serial.print('/'); Serial.println(now.day(), DEC);
+  Serial.println("-------------------------------");
+  Serial.println();
+  
+  /*initialize the variables the PID is linked to*/
+  Input = tempSet;
+  Setpoint = tempSet;
 
-  rtc.halt(false);
-  rtc.writeProtect(true);
-
-  String chardate = rtc.getDateStr();;
-  Serial.print("The clock is set to: "); Serial.print(rtc.getTimeStr()); Serial.print(" on "); Serial.println(chardate);
-  Serial.println("");
-  Serial.println("----------------------------------");
-
-   //initialize the variables we're linked to
-  Input = analogRead(0);
-  Setpoint = 27;
-
-  //turn the PID on
+  /*turn the PID on*/
   myPID.SetMode(AUTOMATIC);
 }
   
@@ -139,39 +137,29 @@ void setup() {
 
 void loop() {
 
-  /* log */
+  /* log - assign the data to an array and print to serial */
 
-  String sensorData[4]; // for some reason if this isn't 4 then the daylog string overlflows into the sensorData array
-  
-  /* set points */
-  int set_lux = 50;
-  
-  //beign the code for the tempurature sensor
-  
-  float t = sht31.readTemperature();
-  float h = sht31.readHumidity();
-  sensors_event_t event;
-  tsl.getEvent(&event);
+  String sensorData[4]; // for some reason if this isn't 4 then the last array spot (lux, sensorData[3]) is wonky
 
-  sensorData[0] = rtc.getTimeStr();
+  sensorData[0] = timeString();
   Serial.println(sensorData[0]);
 
+  float t = sht31.readTemperature();
   sensorData[1] = t;
   Input = t;
   Serial.print("Temp *C = "); Serial.println(sensorData[1]);
-  Serial.print("PWM output = "); Serial.println(Output);
-  
-  sensorData[2] = h;
+
+  sensorData[2] = sht31.readHumidity();
   Serial.print("Hum. % = "); Serial.println(sensorData[2]);
 
+  sensors_event_t event;
+  tsl.getEvent(&event);
   sensorData[3] = event.light;
   Serial.print("lux = "); Serial.println(sensorData[3]);
   
-  Serial.println();
-  
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  String daylog = rtc.getDateStr(FORMAT_SHORT, FORMAT_LITTLEENDIAN, '-'); //the option BIG_LITTLEENDIAN messes up the data so the date format is stuck as mm-dd-yy
+  String daylog = sensorData[0].substring(2,7);
   daylog += ".log";
   File dataFile = SD.open(daylog, FILE_WRITE);
 
@@ -185,26 +173,17 @@ void loop() {
   }
   // if the file isn't open, pop up an error:
   else {
-    Serial.println("error opening datalog.txt");
+    Serial.println("error opening datalog");
+    Serial.println(daylog);
   }
-  //fan speed
-  analogWrite(fan, 10);
-
-  //lights
   
-  if (set_lux>sensorData[3].toInt()) {
-    adjustlux += 10;
-    analogWrite(lights, adjustlux);
-  }
-  else if (set_lux<sensorData[3].toInt()) {
-    adjustlux -= 10;
-    analogWrite(lights, adjustlux);
-  }
-  else {
-    //nothing
-  }
+  /*Control fan speed*/
+  analogWrite(fan, 50);
 
-  //PID for temputature
+  /*Control LED*/
+  digitalWrite(lights, HIGH); 
+ 
+  /*PID for temputature*/
   double gap = abs(Setpoint-Input); //distance away from setpoint
   if(gap<0.5)
   {  //we're close to setpoint, use conservative tuning parameters
@@ -218,6 +197,11 @@ void loop() {
 
   myPID.Compute();
   analogWrite(peltier,Output);
-  
+  /* for debugging PID */
+  Serial.print("gap = "); Serial.println(gap);
+  Serial.print("PWM input = "); Serial.println(Input);
+  Serial.print("PWM output = "); Serial.println(Output);
+  Serial.println();
+    
   delay(2000);
 }
