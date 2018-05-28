@@ -92,6 +92,12 @@ void setup() {
   while (!Serial)
     delay(10);     // will pause Zero, Leonardo, etc until serial console opens
 
+  /* adjust timer 2 to give pin 3 and 11 25kHz output*/
+  pinMode(3, OUTPUT);
+  OCR2B = 10;  //50% duty cycle 
+  TCCR2A = _BV(COM2A0) | _BV(WGM21) | _BV(WGM20);  //toggle output, fast PWM mode 
+  TCCR2B = _BV(WGM22) | _BV(CS21) | _BV(CS20); //   fast PWM mode, prescale 1:64
+  
   /* set up temp sensor */
   if (! sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
     Serial.println("Couldn't find SHT31");
@@ -178,7 +184,7 @@ void loop() {
   }
   
   /*Control fan speed*/
-  analogWrite(fan, 50);
+  analogWrite(fan, 0);
 
   /*Control LED*/
   digitalWrite(lights, HIGH); 
