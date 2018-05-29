@@ -1,7 +1,53 @@
+<!DOCTYPE html>
 <html>
-  <head>
-  </head>
-  <body>
-    <h1>Hello, World!</h1>
-  </body>
+
+<canvas id="myChart"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+	var ctx = document.getElementById('myChart').getContext('2d');
+	var chart = new Chart(ctx, {
+	    // The type of chart we want to create
+	    type: 'line',
+
+	    // The data for our dataset
+	    // y axis = TIME (NOT as a dataset, maybe as a label?)
+	    // x axis = dataset: [{data:[x1,x2]}]
+	    // Need processing of TIME to add to labels list
+	    // Need processing of DATA UNITS to add to data list
+	    data: {
+	        labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+	        datasets: [{
+	       //     label: "TIME",
+	       //     backgroundColor: 'rgb(0, 255, 0)',
+	       //     borderColor: 'rgb(255, 99, 132)',
+	       //     data: [0, 10, 5, 2, 20, 30, 45],
+	       // },
+	       // {
+	            label: "TEMPERATURE",
+	            backgroundColor: 'rgb(255, 0, 0)',
+	            borderColor: 'rgb(255, 99, 132)',
+	            data: [0, 20, 40, 60, 80, 100],
+	        },
+	        {
+	            label: "HUMIDITY",
+	            backgroundColor: 'rgb(0, 0, 255)',
+	            borderColor: 'rgb(255, 99, 132)',
+	            data: [0, 100, 50, 20, 2, 50, 20],
+	        },
+	        {
+	            label: "LUX",
+	            backgroundColor: 'rgb(0, 255, 0)',
+	            borderColor: 'rgb(255, 99, 132)',
+	            data: [100, 100, 100, 90, 80, 70, 60],
+	        }]
+	    },
+
+	    // Configuration options go here
+	    options: {}
+	});
+</script>
+
+
+
 </html>
