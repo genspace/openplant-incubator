@@ -165,7 +165,7 @@ void loop() {
   
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  String daylog = sensorData[0].substring(2,7);
+  String daylog = sensorData[0].substring(2,8);
   daylog += ".log";
   File dataFile = SD.open(daylog, FILE_WRITE);
 
