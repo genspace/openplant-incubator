@@ -66,6 +66,12 @@ void configureSD() {
   }
 }
 
+int hackedanalog(int pwm) {
+  // adjust the duty cycle of the pin3 25khz signal as per pwm specs for the conrol of most cpu fans
+  int analog = 79 * pwm / 100; 
+  return pwm;
+  }
+
 String timeString() {
   DateTime now = rtc.now();
   char buffer[18];
@@ -84,20 +90,14 @@ void setup() {
 
   pinMode(lights, OUTPUT);
   pinMode(peltier, OUTPUT);
-  pinMode(fan, OUTPUT);
+
 
   /* set up serial */
   Serial.begin(9600);
 
   while (!Serial)
     delay(10);     // will pause Zero, Leonardo, etc until serial console opens
-
-  /* adjust timer 2 to give pin 3 and 11 25kHz output*/
-  pinMode(3, OUTPUT);
-  OCR2B = 10;  //50% duty cycle 
-  TCCR2A = _BV(COM2A0) | _BV(WGM21) | _BV(WGM20);  //toggle output, fast PWM mode 
-  TCCR2B = _BV(WGM22) | _BV(CS21) | _BV(CS20); //   fast PWM mode, prescale 1:64
-  
+   
   /* set up temp sensor */
   if (! sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
     Serial.println("Couldn't find SHT31");
@@ -120,6 +120,14 @@ void setup() {
   /* Setup the SD card */
   configureSD();
 
+  /* adjust timer 2 to give pin 3 and 11 25kHz output*/
+  TCCR2A = 0x23;
+  TCCR2B = 0x09;  // select timer2 clock
+  OCR2A = 79;  // aiming for 25kHz
+  pinMode(fan, OUTPUT);
+  OCR2B = 62;  // set the PWM duty cycle
+
+  
   /*Display the time for sanity*/
   DateTime now = rtc.now();
   Serial.print("The clock is set to: "); Serial.print(now.hour()); Serial.print(':'); Serial.print(now.minute()); Serial.print(':'); Serial.print(now.second());
@@ -183,9 +191,6 @@ void loop() {
     Serial.println(daylog);
   }
   
-  /*Control fan speed*/
-  analogWrite(fan, 0);
-
   /*Control LED*/
   digitalWrite(lights, HIGH); 
  
@@ -207,6 +212,10 @@ void loop() {
   Serial.print("PWM input = "); Serial.println(Input);
   Serial.print("PWM output = "); Serial.println(Output);
   Serial.println();
+
+  /*Control fan speed*/
+  //analogWrite(fan, 100);
+  OCR2B = hackedanalog(map(Output, 0, 255, 30, 100));
 
   // analogWrite(peltier, 255);
   
