@@ -28,7 +28,7 @@ Adafruit_SHT31 sht31 = Adafruit_SHT31();                                        
 double Setpoint, Input, Output;
 
 //Define the aggressive and conservative Tuning Parameters
-const double aggKp=4, aggKi=0.2, aggKd=1;
+const double aggKp=9, aggKi=0.2, aggKd=1;
 const double consKp=1, consKi=0.05, consKd=0.25;
 
 //Specify the links and initial tuning parameters
@@ -171,26 +171,6 @@ void loop() {
   sensorData[3] = event.light;
   Serial.print("lux = "); Serial.println(sensorData[3]);
   
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
-  String daylog = sensorData[0].substring(2,8);
-  daylog += ".log";
-  File dataFile = SD.open(daylog, FILE_WRITE);
-
-  // if the file is available, write to it:
-  if (dataFile) {
-    for (int i=0; i<=3; i++) {
-      dataFile.print(sensorData[i]); dataFile.print(", ");
-    }
-    dataFile.println(Output);
-    dataFile.close();
-  }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening datalog");
-    Serial.println(daylog);
-  }
-  
   /*Control LED*/
   digitalWrite(lights, HIGH); 
  
@@ -209,15 +189,37 @@ void loop() {
   analogWrite(peltier,Output);
   /* for debugging PID */
   Serial.print("gap = "); Serial.println(gap);
-  Serial.print("PWM input = "); Serial.println(Input);
   Serial.print("PWM output = "); Serial.println(Output);
-  Serial.println();
+  // analogWrite(peltier, 255);
 
   /*Control fan speed*/
   //analogWrite(fan, 100);
-  OCR2B = hackedanalog(map(Output, 0, 255, 30, 100));
+  OCR2B = hackedanalog(map(Output, 0, 255, 23, 79));
+  Serial.print("OCR2B = "); Serial.println(OCR2B);
+  Serial.println();
 
-  // analogWrite(peltier, 255);
+  
+  // open the file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  String daylog = sensorData[0].substring(2,8);
+  daylog += ".log";
+  File dataFile = SD.open(daylog, FILE_WRITE);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    for (int i=0; i<=3; i++) {
+      dataFile.print(sensorData[i]); dataFile.print(", ");
+    }
+    dataFile.print(Input); dataFile.print(", ");
+    dataFile.print(OCR2B); dataFile.print(", ");
+    dataFile.println(Output);
+    dataFile.close();
+  }
+  // if the file isn't open, pop up an error:
+  else {
+    Serial.println("error opening datalog");
+    Serial.println(daylog);
+  }
   
   delay(2000);
 }
