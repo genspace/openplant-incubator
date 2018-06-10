@@ -15,6 +15,9 @@ const int lights = 4;   // PWM pin for the lights
 const int peltier = 5;  // PWM pin for the peltier
 const int fan = 3;      // PWM pin for the fan
 
+//const int innerSensefan = 8;  // Sensor for the inner fan speed
+//const int outerSensefan = 7;  // Sensor for the outer fan speed
+
 /* define the sensors */
 
 RTC_PCF8523 rtc;                                                                        // name the clock
@@ -66,18 +69,23 @@ void configureSD() {
   }
 }
 
-int hackedanalog(int pwm) {
-  // adjust the duty cycle of the pin3 25khz signal as per pwm specs for the conrol of most cpu fans
-  int analog = 79 * pwm / 100; 
-  return pwm;
-  }
-
 String timeString() {
   DateTime now = rtc.now();
   char buffer[18];
   snprintf(buffer, 18, "%04d%02d%02d_%02d:%02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
   return buffer;
 }
+
+/* not accurate
+double fanSpeed(int fan) {
+  unsigned long rise = pulseIn(fan, HIGH);
+  unsigned long fall = pulseIn(fan, LOW);
+  unsigned long total = rise + fall;
+  double rpm = 1000000/2*total*60;
+  return rpm;
+}
+*/
+
 /**************************************************************************/
 /*
     Setup code
@@ -91,6 +99,10 @@ void setup() {
   pinMode(lights, OUTPUT);
   pinMode(peltier, OUTPUT);
 
+  /* set up the input pins */
+
+  //pinMode(innerSensefan, INPUT_PULLUP);
+  //pinMode(outerSensefan, INPUT_PULLUP);
 
   /* set up serial */
   Serial.begin(9600);
@@ -194,10 +206,15 @@ void loop() {
 
   /*Control fan speed*/
   //analogWrite(fan, 100);
-  OCR2B = hackedanalog(map(Output, 0, 255, 23, 79));
-  Serial.print("OCR2B = "); Serial.println(OCR2B);
+  OCR2B = map(Output, 0, 255, 30, 79);
+  Serial.print("Fan output (%) = "); Serial.println(double OCR2B / 79 * 100);
   Serial.println();
 
+  /*print the calcualed RPM
+  Serial.print("Inner fan (RPM) = "); Serial.println(fanSpeed(innerSensefan));
+  Serial.print("Outer fan (RPM) = "); Serial.println(fanSpeed(outerSensefan));
+  Serial.println();
+  */
   
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
