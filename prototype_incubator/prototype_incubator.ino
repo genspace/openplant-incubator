@@ -11,7 +11,7 @@
 
 const int chipSelect = 10; // set the pin for the SD card
 
-const int lights = 4;   // PWM pin for the lights
+const int lights = 4;   // pin for the lights
 const int peltier = 5;  // PWM pin for the peltier
 const int fan = 3;      // PWM pin for the fan
 
@@ -184,7 +184,13 @@ void loop() {
   Serial.print("lux = "); Serial.println(sensorData[3]);
   
   /*Control LED*/
-  digitalWrite(lights, HIGH); 
+  int noon2night = sensorData[0].substring(9,11).toInt();
+  if (noon2night <= 6 || noon2night >=18) {
+    digitalWrite(lights, HIGH); 
+  }
+  else {
+    digitalWrite(lights, LOW);
+  }
  
   /*PID for temputature*/
   double gap = abs(Setpoint-Input); //distance away from setpoint
