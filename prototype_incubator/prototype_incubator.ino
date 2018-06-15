@@ -9,7 +9,7 @@
 
 /* Set the appropriate digital I/O pin connections. These are the pin */
 
-const int chipSelect = 10; // set the pin for the SD card
+const int chipSelect = 9; // set the pin for the SD card
 
 const int lights = 4;   // pin for the lights
 const int peltier = 5;  // PWM pin for the peltier
@@ -189,7 +189,7 @@ void loop() {
     digitalWrite(lights, HIGH); 
   }
   else {
-    digitalWrite(lights, LOW);
+    digitalWrite(lights, HIGH); //for testing purposes
   }
  
   /*PID for temputature*/
