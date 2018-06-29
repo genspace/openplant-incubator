@@ -12,9 +12,9 @@
 
 const int chipSelect = 10; // set the pin for the SD card
 
-const int lights = 5;   // PWM pin for the lights
-const int peltier = 3;  // PWM pin for the peltier
-const int fan = 6;      // PWM pin for the fan
+const int lights = 4;   // PWM pin for the lights
+const int peltier = 5;  // PWM pin for the peltier
+const int fan = 3;      // PWM pin for the fan
 
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);     // name the lux sensor
 Adafruit_SHT31 sht31 = Adafruit_SHT31();                                                // name the temp sensor
