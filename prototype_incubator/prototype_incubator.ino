@@ -9,7 +9,7 @@
 
 /* Set the appropriate digital I/O pin connections. These are the pin */
 
-const int chipSelect = 9; // set the pin for the SD card
+const int chipSelect = 10; // set the pin for the SD card
 
 const int lights = 4;   // pin for the lights
 const int peltier = 5;  // PWM pin for the peltier
@@ -28,19 +28,19 @@ Adafruit_SHT31 sht31 = Adafruit_SHT31();                                        
 /* The array os string used to store the data as it comes from the sensors */
 
 /* PID variables and constants */
-double Setpoint, Input, Output;
+double Setpoint, Input, Output=255;
 
-//Define the aggressive and conservative Tuning Parameters
-const double aggKp=9, aggKi=0.2, aggKd=1;
-const double consKp=1, consKi=0.05, consKd=0.25;
+//Define the Tuning Parameters foir when the light is on and when it is off
+const double lightKp=150, lightKi=20, lightKd=1;
+//const double darkKp=50, darkKi=10, darkKd=15;
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
+PID myPID(&Input, &Output, &Setpoint, lightKp, lightKi, lightKd, REVERSE);
 
 /* Setpoints */
 
-const int luxSet = 50;
-const int tempSet = 18;
+//const int luxSet = 50;
+const int tempSet = 21;
 
 /**************************************************************************/
 /*
@@ -185,25 +185,25 @@ void loop() {
   
   /*Control LED*/
   int noon2night = sensorData[0].substring(9,11).toInt();
-  if (noon2night <= 6 || noon2night >=18) {
-    digitalWrite(lights, HIGH); 
+  if (noon2night >= 4 || noon2night <=12) {
+    digitalWrite(lights, HIGH); //for testing purposes set high
   }
   else {
-    digitalWrite(lights, HIGH); //for testing purposes
+    digitalWrite(lights, HIGH);
   }
  
   /*PID for temputature*/
-  double gap = abs(Setpoint-Input); //distance away from setpoint
-  if(gap<1) { //we're close to setpoint, use conservative tuning parameters
-    myPID.SetTunings(consKp, consKi, consKd);
+  double gap = Input-Setpoint; //distance away from setpoint
+  if(gap>1) { //we're far from setpoint, 
+     Output = 255;
     }
   else {
-     //we're far from setpoint, use aggressive tuning parameters
-     myPID.SetTunings(aggKp, aggKi, aggKd);
+     //we're close to setpoint, use PID
+     //myPID.SetTunings(lightKp, lightKi, lightKd);
+     //myPID.SetControllerDirection(REVERSE);
+     myPID.Compute();
     }
 
-  myPID.SetControllerDirection(REVERSE);
-  myPID.Compute();
   analogWrite(peltier,Output);
   /* for debugging PID */
   Serial.print("gap = "); Serial.println(gap);
