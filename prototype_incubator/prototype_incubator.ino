@@ -185,8 +185,8 @@ void loop() {
   
   /*Control LED*/
   int noon2night = sensorData[0].substring(9,11).toInt();
-  if (noon2night >= 4 || noon2night <=12) {
-    digitalWrite(lights, HIGH); //for testing purposes set high
+  if (noon2night >= 4 && noon2night <=12) {
+    digitalWrite(lights, LOW); //for testing purposes set high
   }
   else {
     digitalWrite(lights, HIGH);
