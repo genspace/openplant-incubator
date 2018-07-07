@@ -206,7 +206,7 @@ void loop() {
 
   analogWrite(peltier,Output);
   /* for debugging PID */
-  Serial.print("gap = "); Serial.println(gap);
+g  Serial.print("gap = "); Serial.println(gap);
   Serial.print("PWM output = "); Serial.println(Output);
   // analogWrite(peltier, 255);
 
