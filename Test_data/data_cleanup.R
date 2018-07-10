@@ -19,6 +19,7 @@ require(dplyr)
 require(tidyr)
 require(stringr)
 require(ggplot2)
+require(zoo)
 
 #+ session-info
 sessionInfo() #for reproducibility
@@ -36,12 +37,14 @@ files <- c("180703.LOG", "180704.LOG", "180705.LOG", "180706.LOG","180707.LOG")
 working_data <- lapply(files, read_csv, col_names = labels) %>%
   bind_rows() %>%
   transform(time = as.POSIXct(strptime(time, "%Y%m%d_%H:%M:%S"))) %>%
-  select(time, temp, humidity, lux, fan, output) %>%
-  gather(measure, value, -time, rm.na = TRUE) %>%
+  select(-input, -fan) %>%
+  gather(measure, value, -time) %>%
   arrange(time, measure)
 
 #+ display-data
-#' plot something
-ggplot(data = working_data) +
-  geom_line(aes(x = time, y = temp)) +
-  geom_line(aes(x = time, y = output))
+#' plot the measures
+ggplot(data = working_data, aes(x = time, y = value)) +
+  scale_color_brewer(palette = "Set1") +
+  geom_line(aes(alpha = 0.5)) +
+  #geom_line(aes(y = rollmean(value, 30, fill = NA), colour = measure)) +
+  facet_grid(measure ~ ., scales = "free_y")
