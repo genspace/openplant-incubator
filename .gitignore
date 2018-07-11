@@ -1,4 +1,10 @@
+#RStudio tempfiles#
+###################
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+#knitr tempfiles#
+#################
+.Rmd
