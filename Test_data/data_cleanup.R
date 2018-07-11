@@ -7,18 +7,19 @@
 #' ---
 
 #/*making a note book with knitr.spin is preferable because of the dynamic possible code debugging*/
-#/* YAML header, #' for drop into Rmarkdown (#, ## headers), #+ for chunks (try not to disrupt code chunks with comments, place before)*/
+#/* YAML header, #' for drop into Rmarkdown (#, ## headers), #+ for chunks (try not to disrupt code chunks with Rmarkdown, place before)*/
 
-#/*set global knitr options*/
-#+ knitr-options, message=FALSE, echo=FALSE
+#+ intial-setup, message=FALSE, include=FALSE, echo=FALSE
+#set global knitr options
 knitr::opts_chunk$set(warning = FALSE, tidy = FALSE)
 
-#+ import-libraries, message=FALSE
+#tidyverse
 require(readr)
 require(dplyr)
 require(tidyr)
 require(stringr)
 require(ggplot2)
+# for time series data
 require(zoo)
 
 #+ session-info
@@ -26,14 +27,11 @@ sessionInfo() #for reproducibility
 
 #' #Read in data and preprocess
 #'
-#+ import-process-data
-#'declare the labels for the columns
+#' Declare the labels for the columns and list the files which will be read into the data table. Then prep the master data table as tidy data.
+#+ import-process-data, message=FALSE
 labels <- c("time", "temp", "humidity", "lux", "input", "fan", "output")
-
-#' list the files which will be read into the data table
 files <- c("180703.LOG", "180704.LOG", "180705.LOG", "180706.LOG","180707.LOG")
 
-#' prep the data table
 working_data <- lapply(files, read_csv, col_names = labels) %>%
   bind_rows() %>%
   transform(time = as.POSIXct(strptime(time, "%Y%m%d_%H:%M:%S"))) %>%
@@ -41,10 +39,19 @@ working_data <- lapply(files, read_csv, col_names = labels) %>%
   gather(measure, value, -time) %>%
   arrange(time, measure)
 
-#+ display-data
+#' #Visualze the data
+#' 
 #' plot the measures
+#+ display-data
 ggplot(data = working_data, aes(x = time, y = value)) +
-  scale_color_brewer(palette = "Set1") +
-  geom_line(aes(alpha = 0.5)) +
-  #geom_line(aes(y = rollmean(value, 30, fill = NA), colour = measure)) +
+  #scale_color_brewer(palette = "Set1") +
+  geom_line() +
+  #geom_line(aes(alpha = 0.5)) +
+  #geom_line(aes(x = rollmean(time, 3, fill = NA), y = rollmean(value, 3, fill = NA), colour = measure)) +
   facet_grid(measure ~ ., scales = "free_y")
+
+ggplot(data = filter(working_data, format(time, "%m%d") == "0707"), aes(x = time, y = value)) +
+  geom_line() +
+  facet_grid(measure ~ ., scales = "free_y")
+
+#' zoom into the interesting features on July 7
