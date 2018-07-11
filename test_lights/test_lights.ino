@@ -4,6 +4,7 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(lights, OUTPUT);
   pinMode(5, OUTPUT);
+  pinMode(3, OUTPUT);
   Serial.begin(9600);
   
   while (!Serial)
@@ -16,6 +17,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   digitalWrite(5, LOW);
+  digitalWrite(3, LOW);
   Serial.println("lights ON");
   digitalWrite(lights, HIGH); //for testing purposes
   delay(5000);

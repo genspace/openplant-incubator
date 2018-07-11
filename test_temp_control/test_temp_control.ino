@@ -48,14 +48,14 @@ void loop() {
   analogWrite(peltier, 0);
   Serial.println("Fan off, peltier off");
   delay(30000);
-  analogWrite(peltier, 255);
+  digitalWrite(peltier, HIGH);
   Serial.println("Fan off, peltier on");
   delay(30000);
   OCR2B = 79;
   analogWrite(peltier,0);
   Serial.println("Fan on, peltier off");
   delay(30000);
-  analogWrite(peltier,255);
+  digitalWrite(peltier,HIGH);
   Serial.println("Fan on, peltier on");
   delay(30000);
 }

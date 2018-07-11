@@ -26,6 +26,8 @@ void setup () {
     while (1);
   }
 
+  delay(10);
+  
   if (! rtc.initialized()) {
     Serial.println("RTC is NOT running!");
     // following line sets the RTC to the date & time this sketch was compiled
