@@ -29,13 +29,14 @@ sessionInfo() #for reproducibility
 #'
 #' Declare the labels for the columns and list the files which will be read into the data table. Then prep the master data table as tidy data.
 #+ import-process-data, message=FALSE
-labels <- c("time", "temp", "humidity", "lux", "input", "fan", "output")
+labels <- c("time", "temp", "humidity", "lux", "input", "fan", "output") #comment out this line for the updated code since fan and input are removed from the code
+labels <- c("time", "temp", "humidity", "lux", "output")
 files <- c("180703.LOG", "180704.LOG", "180705.LOG", "180706.LOG","180707.LOG", "180708.LOG", "180709.LOG", "180710.LOG")
 
 working_data <- lapply(files, read_csv, col_names = labels) %>%
   bind_rows() %>%
   transform(time = as.POSIXct(strptime(time, "%Y%m%d_%H:%M:%S"))) %>%
-  select(-input, -fan) %>%
+  select(-input, -fan) %>% #comment out this line for the updated code since fan and input are removed from the code
   gather(measure, value, -time) %>%
   arrange(time, measure)
 
