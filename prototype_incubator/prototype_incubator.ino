@@ -206,14 +206,13 @@ void loop() {
 
   analogWrite(peltier,Output);
   /* for debugging PID */
-g  Serial.print("gap = "); Serial.println(gap);
+  Serial.print("gap = "); Serial.println(gap);
   Serial.print("PWM output = "); Serial.println(Output);
   // analogWrite(peltier, 255);
 
   /*Control fan speed*/
   //analogWrite(fan, 100);
   OCR2B = map(Output, 0, 255, 30, 79);
-  Serial.print("Fan output (%) = "); Serial.println(double OCR2B / 79 * 100);
   Serial.println();
 
   /*print the calcualed RPM
@@ -233,8 +232,6 @@ g  Serial.print("gap = "); Serial.println(gap);
     for (int i=0; i<=3; i++) {
       dataFile.print(sensorData[i]); dataFile.print(", ");
     }
-    dataFile.print(Input); dataFile.print(", ");
-    dataFile.print(OCR2B); dataFile.print(", ");
     dataFile.println(Output);
     dataFile.close();
   }
