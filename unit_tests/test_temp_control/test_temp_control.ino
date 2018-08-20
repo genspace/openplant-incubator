@@ -45,17 +45,17 @@ void loop() {
   /*Control fan speed*/
   //analogWrite(fan, 100);
   OCR2B = 0;
-  analogWrite(peltier, 0);
+  analogWrite(peltier, LOW);
   Serial.println("Fan off, peltier off");
-  delay(30000);
+  delay(10000);
   digitalWrite(peltier, HIGH);
   Serial.println("Fan off, peltier on");
-  delay(30000);
+  delay(10000);
   OCR2B = 79;
-  analogWrite(peltier,0);
+  analogWrite(peltier,LOW);
   Serial.println("Fan on, peltier off");
-  delay(30000);
+  delay(10000);
   digitalWrite(peltier,HIGH);
   Serial.println("Fan on, peltier on");
-  delay(30000);
+  delay(10000);
 }
