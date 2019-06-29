@@ -14,24 +14,24 @@
  ****************************************************/
 
 #include "Adafruit_SHT31.h"
+#include "RTClib.h"           // library for the RTC
 
-// User input constants
-const int desiredTemp = 22.0;
+const float peltier_on_threshold = 25.0;
+const float peltier_off_threshold = 24.0;
 
 const int fan = 3;  // we just run the fans constantly with no input or output, as Danny did
 const int lights = 4;
 const int peltier = 5;
 
-int ledState = LOW;
 int peltierState = LOW;
 
-Adafruit_SHT31 sht31 = Adafruit_SHT31(); // name the temp sensor
+Adafruit_SHT31 sht31 = Adafruit_SHT31();  // name the temp sensor
+RTC_PCF8523 rtc;                          // name the clock
 
 void setup() {
-
   /*
     Set the pins which are attached to other devices to output to
-    prevent a floating pin which can casues issues
+    prevent a floating pin which can cause issues
 
   */
   pinMode(fan, OUTPUT);
@@ -49,14 +49,23 @@ void setup() {
   Serial.println("setup successful");
 }
 
-unsigned long getCurrentTime() {
-  // TODO replace this with getting the time from the real time clock
-  return millis();
+DateTime getCurrentTime() {
+  return rtc.now();
 }
 
-void printCurrentData(unsigned long currentTime, float currentTemp, float currentHum) {
-  Serial.print("Current Time = "); 
-  Serial.println(currentTime);
+void printCurrentData(DateTime currentTime, float currentTemp, float currentHum) {
+  Serial.print("The clock is set to: "); 
+  Serial.print(currentTime.hour()); 
+  Serial.print(':'); 
+  Serial.print(currentTime.minute()); 
+  Serial.print(':'); 
+  Serial.print(currentTime.second());
+  Serial.print(" on "); 
+  Serial.print(currentTime.year(), DEC); 
+  Serial.print('/'); 
+  Serial.print(currentTime.month(), DEC); 
+  Serial.print('/'); 
+  Serial.println(currentTime.day(), DEC);
   
   Serial.print("Temp *C = "); 
   Serial.println(currentTemp);
@@ -65,50 +74,50 @@ void printCurrentData(unsigned long currentTime, float currentTemp, float curren
   Serial.println(currentHum);
 }
 
-void recordCurrentData(unsigned long currentTime, float currentTemp, float currentHum) {
+void recordCurrentData(DateTime currentTime, float currentTemp, float currentHum) {
   // TODO connect to raspberry pi and save the data somewhere in the cloud
 }
 
-const int TEMP_TOL = 1.5;
 void adjustPeltier(float currentTemp) {
-  // TODO replace with a smarter algorithm, use PID like Danny
-  if (currentTemp > desiredTemp + TEMP_TOL && peltierState == LOW) {
+  // TODO(low priority) replace with a smarter algorithm, use PID like Danny
+  if (currentTemp > peltier_on_threshold) {
     peltierState = HIGH;
-    Serial.println("Current temperature " + String(currentTemp) + " is higher than desired temperature " + String(desiredTemp) + ", turning Peltier cooler on");
+    Serial.println("Current temperature " + String(currentTemp) + " is higher than " + String(peltier_on_threshold) + ", turning Peltier cooler on");
     digitalWrite(peltier, peltierState);
   }
-  else if (currentTemp < desiredTemp && peltierState == HIGH) {
+  else if (currentTemp < peltier_off_threshold) {
     peltierState = LOW;
-    Serial.println("Current temperature " + String(currentTemp) + " is lower than desired temperature " + String(desiredTemp) + ", turning Peltier cooler off");
+    Serial.println("Current temperature " + String(currentTemp) + " is lower than " + String(peltier_off_threshold) + ", turning Peltier cooler off");
     digitalWrite(peltier, peltierState);
+  }
+  if (peltierState == HIGH) {
+    Serial.println("Peltier is on");
+  } else if (peltierState == LOW) {
+    Serial.println("Peltier is off");
   }
 }
 
-const int EIGHT_HOURS = 1000*60*60*8;
-const int SIXTEEN_HOURS = 1000*60*60*16;
-unsigned long lightToggleTime = -EIGHT_HOURS;
-void adjustLight() {
-  // TODO change this to use the real time clock
-  if (ledState == LOW && (millis()-lightToggleTime) > EIGHT_HOURS) {
-    ledState = HIGH;
-    digitalWrite(lights, ledState);
-    Serial.println("LED has been off for > 8 hours, turning LED on");
-  } else if (ledState == HIGH && (millis()-lightToggleTime) > SIXTEEN_HOURS) {
-    ledState = LOW;
-    digitalWrite(lights, ledState);
-    Serial.println("LED has been on for > 16 hours, turning LED off");
+void adjustLight(DateTime currentTime) {
+  int hour = currentTime.hour();
+  if (hour >= 4 && hour < 12) {
+    digitalWrite(lights, LOW);
+    Serial.println("Time is between 4am-12pm - lights are off");
+  }
+  else {
+    digitalWrite(lights, HIGH);
+    Serial.println("Time is between 12pm-4am - lights are on");
   }
 }
 
 void loop() {
-  unsigned long currentTime = getCurrentTime();
+  DateTime currentTime = getCurrentTime();
   float currentTemp = sht31.readTemperature();
   float currentHum = sht31.readHumidity();
   printCurrentData(currentTime, currentTemp, currentHum);
   recordCurrentData(currentTime, currentTemp, currentHum);
 
   adjustPeltier(currentTemp);
-  adjustLight();
+  adjustLight(currentTime);
 
-  delay(2000);
+  delay(5000);
 }
