@@ -8,3 +8,4 @@
 #knitr tempfiles#
 #################
 *.Rmd
+data/
