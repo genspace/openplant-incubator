@@ -9,3 +9,5 @@
 #################
 *.Rmd
 data/
+
+.ipynb_checkpoints/
