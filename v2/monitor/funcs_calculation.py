@@ -74,7 +74,7 @@ def color_hist(image):
 
 def size_detect(image, width = 3.93701, fname = "out2.png"):
     """
-    width is equivalent to 100mm
+    width is inches equivalent to 100mm since we're using p100 petri dishes
     """
     # load the image, convert it to grayscale, and blur it slightly
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
