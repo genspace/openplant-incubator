@@ -13,3 +13,4 @@ data/
 #Python Files
 #################
 *.pyc
+.ipynb_checkpoints/
