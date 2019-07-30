@@ -18,3 +18,8 @@ data/
 #OS X Files
 #################
 .DS_Store
+
+#Data Directories
+#################
+imgs/
+data_2/
