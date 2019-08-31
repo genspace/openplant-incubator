@@ -17,27 +17,33 @@ from scipy.spatial import distance as dist
 from imutils import perspective
 from imutils import contours
 import numpy as np
+import sqlalchemy as sql
 
 def start(img_name):
     
     start = time.time()
     
     processed_img = process_img(img_name)
-    metrics, final_img = get_size_health(processed_img)
+    final_img, size, health = get_size_health(processed_img)
     
     img_pcd_name = "data/processed/" + ''.join(img_name.split(".")[:-1]) + "_pcd"  + '.jpg'
     mpimg.imsave(img_pcd_name, processed_img/255)
     os.system("aws s3 cp {0} {1}".format(img_pcd_name, os.environ["OPBUCKET"]))
-    os.system("rm {0}".format(img_pcd_name))
+    #os.system("rm {0}".format(img_pcd_name))
     
     img_final_name = "data/final/" +  ''.join(img_name.split(".")[:-1]) + "_final" + '.jpg'
     mpimg.imsave(img_final_name, final_img/255)
     os.system("aws s3 cp {0} {1}".format(img_final_name, os.environ["OPBUCKET"]))
-    os.system("rm {0}".format(img_final_name))
+    #os.system("rm {0}".format(img_final_name))
     
-    df = pd.read_csv("./data/metrics.csv")
-    result = pd.concat([df, metrics], ignore_index = True, sort = False)
-    result.to_csv("./data/metrics.csv", index = False)
+    #df = pd.read_csv("./data/metrics.csv")
+    #result = pd.concat([df, metrics], ignore_index = True, sort = False)
+    #result.to_csv("./data/metrics.csv", index = False)
+    con = sql.create_engine(os.environ["OPDBSTR2"])
+    df = pd.DataFrame(
+        {"date": [time.time()], 'plantId': [1], "imgRaw": [img_name], "imgPcd": [img_pcd_name ], 
+        "imgFinal": [img_final_name], 'size': [size], 'health': [health]})
+    df.to_sql('imageMetrics', con, if_exists = 'append', index = False)
     
     print(time.time() - start)
     
@@ -45,6 +51,8 @@ def identification():
     
     band_pic, cser = band_wrap(img, circle)
     band_ct = count_bands(cser)
+    
+    return(idx)
     
 def process_img(img_name):
 
@@ -73,9 +81,7 @@ def get_size_health(image):
     colors = calc.color_hist(image)
     plant_green_area = calc.get_area_green(colors)
     
-    data = pd.DataFrame({'plant': ["test.png"], 'size': [plant_size_actual_mm], 'health': [plant_green_area]})
-    
-    return((data, res))
+    return((res, plant_size_actual_mm, plant_green_area))
 
 if __name__ == "__main__":
     fire.Fire(start)
