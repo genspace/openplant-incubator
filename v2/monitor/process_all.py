@@ -26,12 +26,12 @@ def start(img_name):
     processed_img = process_img(img_name)
     final_img, size, health = get_size_health(processed_img)
     
-    img_pcd_name = "data/processed/" + ''.join(img_name.split(".")[:-1]) + "_pcd"  + '.jpg'
+    img_pcd_name = "data/" + ''.join(img_name.split(".")[:-1]) + "_pcd"  + '.jpg'
     mpimg.imsave(img_pcd_name, processed_img/255)
     os.system("aws s3 cp {0} {1}".format(img_pcd_name, os.environ["OPBUCKET"]))
     #os.system("rm {0}".format(img_pcd_name))
     
-    img_final_name = "data/final/" +  ''.join(img_name.split(".")[:-1]) + "_final" + '.jpg'
+    img_final_name = "data/" +  ''.join(img_name.split(".")[:-1]) + "_final" + '.jpg'
     mpimg.imsave(img_final_name, final_img/255)
     os.system("aws s3 cp {0} {1}".format(img_final_name, os.environ["OPBUCKET"]))
     #os.system("rm {0}".format(img_final_name))
@@ -56,7 +56,7 @@ def identification():
     
 def process_img(img_name):
 
-    img_raw = cv2.imread("data/raw/" + img_name, cv2.IMREAD_COLOR)
+    img_raw = cv2.imread("data/" + img_name, cv2.IMREAD_COLOR)
     img, circle = pc.prep_image(img_raw)
     img_circle = pc.draw_circle(img, circle)
 
@@ -85,4 +85,3 @@ def get_size_health(image):
 
 if __name__ == "__main__":
     fire.Fire(start)
-
