@@ -10,6 +10,9 @@
 *.Rmd
 data/
 
+#DB Data Files
+db-data/
+
 #Python Files
 #################
 *.pyc

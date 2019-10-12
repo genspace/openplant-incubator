@@ -4,9 +4,6 @@ FROM python:3.6
 # Create working directory
 WORKDIR /app
 
-# Mount data dir
-VOLUME [ "/data" ]
-
 # Install any needed packages specified in requirements.txt
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
