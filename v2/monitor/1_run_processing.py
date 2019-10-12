@@ -23,11 +23,12 @@ def process_img(img_name):
     img_raw = cv2.imread("data/raw/" + img_name, cv2.IMREAD_COLOR)
     img, circle = pc.prep_image(img_raw)
     img_circle = pc.draw_circle(img, circle)
-    #plt.imshow(img_raw) 
-    #plt.show(img_circle)
+    
+    band_pic, cser = pc.band_wrap(img, circle)
+    band_ct = pc.count_bands(cser)
     
     img_pcd_name = ''.join(img_name.split(".")[:-1]) + "_pcd"
-    mpimg.imsave("data/processed/" + img_pcd_name + '.jpg', img_circle/255)
+    mpimg.imsave("data/processed/" + img_pcd_name + "-" + str(band_ct) + ".jpg", img_circle/255)
 
     print(time.time() - start)
 
