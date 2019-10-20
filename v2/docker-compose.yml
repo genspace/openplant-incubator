@@ -1,0 +1,8 @@
+version: '3'
+services:
+  app:
+    image: openplant:latest
+    build:
+      context: .
+    volumes:
+      - "./db-data:/app/data"
