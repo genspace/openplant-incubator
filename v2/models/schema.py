@@ -21,8 +21,8 @@ class Experiment(Base):
     __tablename__ = 'experiment'
     id = Column(Integer, primary_key=True)
     plant_id = Column(Integer, ForeignKey('plant.id'))
-    vector = Column(String)
-    description = Column(String)
+    vector = Column(String(500))
+    description = Column(String(500))
 
 
 class RawImage(Base):
@@ -30,7 +30,7 @@ class RawImage(Base):
     id = Column(Integer, primary_key=True)
     incubator_id = Column(Integer, ForeignKey('incubator.id'))
     time = Column(DateTime)
-    s3_filepath = Column(String)
+    s3_filepath = Column(String(500))
 
 
 class Image(Base):
@@ -38,7 +38,7 @@ class Image(Base):
     id = Column(Integer, primary_key=True)
     raw_image_id = Column(Integer, ForeignKey('raw_image.id'))
     plant_id = Column(Integer, ForeignKey('plant.id'))
-    s3_filepath = Column(String)
+    s3_filepath = Column(String(500))
 
 
 class Analysis(Base):
