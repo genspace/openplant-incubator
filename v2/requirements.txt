@@ -1,3 +1,4 @@
-sqlalchemy
 alembic
 pandas
+PyMySQL
+sqlalchemy
