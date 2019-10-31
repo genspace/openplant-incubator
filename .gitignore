@@ -27,6 +27,12 @@ db-data/
 imgs/
 data_2/
 
+#TFVars/State
+##############
+*secret.tfvars
+*.tfstate*
+*.terraform/
+
 #VS Code Files
 ##############
 *.vscode
