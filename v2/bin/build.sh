@@ -2,4 +2,4 @@
 
 set -a &&\
   source db.env &&\
-  docker-compose up
+  docker-compose build
