@@ -3,7 +3,7 @@ services:
   app:
     image: openplant:latest
     build:
-      context: .
+      context: ./app/.
     volumes:
       - "./alembic:/app/alembic"
     environment:
