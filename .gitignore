@@ -17,8 +17,9 @@ db-data/
 #################
 *.pyc
 .ipynb_checkpoints/
+*__pycache__*
 
-#OS X Files
+#Os X Files
 #################
 .DS_Store
 
