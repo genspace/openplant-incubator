@@ -37,7 +37,7 @@ class Image(Base):
     __tablename__ = 'image'
     id = Column(Integer, primary_key=True)
     raw_image_id = Column(Integer, ForeignKey('raw_image.id'))
-    processing_method = Column(String)
+    processing_method = Column(String(500))
     plant_id = Column(Integer, ForeignKey('plant.id'))
     s3_filepath = Column(String(500))
 
