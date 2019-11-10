@@ -91,7 +91,7 @@ def main():
         if check_dict_completion(value_dict):
             obj = upload_record_to_database(value_dict)
             logger.info('Loaded: {}'.format(obj))
-        value_dict = dict()
+            value_dict = dict()
     return None
 
 if __name__ == '__main__':
