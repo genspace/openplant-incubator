@@ -7,4 +7,4 @@ echo $RSA_PEM
 echo $BASTION
 
 ssh -i $RSA_PEM\
-    ubuntu@${BASTION}
+    ec2-user@${BASTION}
