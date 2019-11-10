@@ -29,7 +29,19 @@ engine = create_engine(get_connection_string())
 session = Session(bind=engine)
 
 #-get incubator id
-incubator_id = session.query()
+def get_incubator_id():
+    query_result =\
+        session.query(Incubator.id)\
+               .filter(Incubator.number == incubator_number)\
+               .first()
+    if len(query_result) > 0:
+        incubator_id = query_result[0]
+        logger.info('Incubator ID: {}'.format(incubator_id))
+    else:
+        logger.error('Invalid incubator number: {}'
+                      .format(incubator_number))
+        raise ValueError('INVALID INCUBATOR NUMBER!')
+    return incubator_id
 
 #-create connection to serial drive
 ser = serial.Serial('/dev/ttyUSB0', 9600)
@@ -65,7 +77,7 @@ def check_dict_completion(value_dict):
     return len(labels - keys) == 0
 
 
-def upload_record_to_database(value_dict):
+def upload_record_to_database(value_dict, incubator_id):
     obj = Sensor()
     obj.incubator_id = incubator_id
     obj.time = dt.datetime.today()
@@ -83,6 +95,7 @@ def main():
     """
     ser.flushInput()
     value_dict = dict()
+    incubator_id = get_incubator_id()
     while 1:
         if(ser.in_waiting > 0):
             line = ser.readline().decode("utf-8")
@@ -90,7 +103,7 @@ def main():
             add_line_to_dict(line, value_dict)
             logger.info(str(value_dict))
         if check_dict_completion(value_dict):
-            obj = upload_record_to_database(value_dict)
+            obj = upload_record_to_database(value_dict, incubator_id)
             logger.info('Loaded: {}'.format(obj))
             value_dict = dict()
     return None
