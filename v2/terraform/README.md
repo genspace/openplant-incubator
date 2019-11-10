@@ -1,7 +1,7 @@
-# CoreDB Infra
+# OpenPlant Infra
 
-This repo contains the code necessary to spin up AWS infrastructure relevant to CoreDB.
-Currently, it includes instructions to create a bastion EC2 server as well as an RDS instance.
+This repo contains the code necessary to spin up AWS infrastructure relevant to OpenPlant App.
+Currently, it includes instructions to create an Ubuntu EC2 Server.
 
 ## How To
 

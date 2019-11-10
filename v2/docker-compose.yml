@@ -6,18 +6,18 @@ services:
       context: ./app/
     volumes:
       - "./alembic:/app/alembic"
-    environment:
-      CONNECTION_STRING: mysql+pymysql://root:${OPENPLANT_DB_PASSWORD}@openplant_db/openplant
+    env_file:
+      - db.env
   db:
     container_name: openplant_db
     image: mariadb
     restart: always
     environment:
       MYSQL_DATABASE: openplant
-      MYSQL_ROOT_PASSWORD: ${OPENPLANT_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - openplant-data:/var/lib/mysql
 
 volumes:
-  openplant-data:
+  openplant-data: {}
 
