@@ -14,13 +14,13 @@ Base = declarative_base()
 class Plant(Base):
     __tablename__ = 'plant'
     id = Column(Integer, primary_key=True)
+    experiment_id = Column(Integer, ForeignKey('experiment.id'))
     barcode = Column(Integer)
 
 
 class Experiment(Base):
     __tablename__ = 'experiment'
     id = Column(Integer, primary_key=True)
-    plant_id = Column(Integer, ForeignKey('plant.id'))
     vector = Column(String(500))
     description = Column(String(500))
 
@@ -37,6 +37,7 @@ class Image(Base):
     __tablename__ = 'image'
     id = Column(Integer, primary_key=True)
     raw_image_id = Column(Integer, ForeignKey('raw_image.id'))
+    processing_method = Column(String)
     plant_id = Column(Integer, ForeignKey('plant.id'))
     s3_filepath = Column(String(500))
 
@@ -62,3 +63,4 @@ class Sensor(Base):
 class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True)
+    number = Column(Integer)
