@@ -51,6 +51,7 @@ def add_line_to_dict(e, value_dict):
         if reg:
             val = reg.group(1)
             value_dict.update({label: val})
+            logger.info(f'Parsed: ({label}, {val})')
             return value_dict
     return None
 
@@ -84,9 +85,11 @@ def main():
     while 1:
         if(ser.in_waiting > 0):
             line = ser.readline().decode("utf-8")
+            logger.info(line)
             add_line_to_dict(line, value_dict)
         if check_dict_completion(value_dict):
-            upload_record_to_database(value_dict)
+            obj = upload_record_to_database(value_dict)
+            logger.info(f'Loaded: {obj}')
         value_dict = dict()
     return None
 
