@@ -37,6 +37,7 @@ def get_incubator_id():
     if query_result:
         incubator_id = query_result[0]
         logger.info('Incubator ID: {}'.format(incubator_id))
+    #-add to database if not exists
     elif re.match('\d+$', incubator_number):
         logger.info('Encountered new incubator number: {}'
                     .format(incubator_number))
@@ -45,6 +46,7 @@ def get_incubator_id():
         obj.number = incubator_number
         session.add(obj)
         session.commit()
+        #-get updated incubator value
         incubator_id = get_incubator_id()
         logger.info('Added new incubator: {}'.format(incubator_id))
     else:
@@ -63,6 +65,10 @@ regex_map = [
     ('light', r'lights are (\w+)', ),
 ]
 
+label_translation = [
+    ('light', lambda e: int(e == 'on'))
+]
+
 
 def add_line_to_dict(e, value_dict):
     """
@@ -71,8 +77,14 @@ def add_line_to_dict(e, value_dict):
     for label, regex in regex_map:
         reg = re.search(regex, e)
         if reg:
+            #-get matched regex value
             val = reg.group(1)
+            #-translate value if in label translation
+            if label in dict(label_translation).keys():
+                val = dict(label_translation)[label](val)
+            #-add to dictionary
             value_dict[label] = val
+            #-log output
             logger.info('Parsed: ({}, {})'.format(label, val))
             break
     return value_dict
@@ -88,6 +100,9 @@ def check_dict_completion(value_dict):
 
 
 def upload_record_to_database(value_dict, incubator_id):
+    """
+    Build upload object and add to database
+    """
     obj = Sensor()
     obj.incubator_id = incubator_id
     obj.time = dt.datetime.today()
