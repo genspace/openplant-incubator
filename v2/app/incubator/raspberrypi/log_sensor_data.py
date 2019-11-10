@@ -86,7 +86,7 @@ def main():
         if(ser.in_waiting > 0):
             line = ser.readline().decode("utf-8")
             logger.info(line)
-            value_dict = add_line_to_dict(line, value_dict)
+            add_line_to_dict(line, value_dict)
             logger.info(str(value_dict))
         if check_dict_completion(value_dict):
             obj = upload_record_to_database(value_dict)
