@@ -22,6 +22,6 @@ variable "availability_zones" {
 variable "amis" {
   type = "map"
   default = {
-    "us-east-2" = "ami-be7753db"
+    "us-east-2" = "ami-0a80c1bfc488c6673"
   }
 }

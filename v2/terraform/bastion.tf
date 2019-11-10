@@ -8,7 +8,7 @@ resource "aws_key_pair" "bastion_key" {
 resource "aws_instance" "bastion" {
   ami                           = "${var.amis[var.region]}"
   key_name                      = "${aws_key_pair.bastion_key.key_name}"
-  instance_type                 = "t2.micro"
+  instance_type                 = "t2.small"
   vpc_security_group_ids        = ["${aws_security_group.bastion-sg.id}"]
   associate_public_ip_address   = true
 }
