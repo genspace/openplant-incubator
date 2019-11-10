@@ -13,21 +13,21 @@ Base = declarative_base()
 
 class Plant(Base):
     __tablename__ = 'plant'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     experiment_id = Column(Integer, ForeignKey('experiment.id'))
     barcode = Column(Integer)
 
 
 class Experiment(Base):
     __tablename__ = 'experiment'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     vector = Column(String(500))
     description = Column(String(500))
 
 
 class RawImage(Base):
     __tablename__ = 'raw_image'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     incubator_id = Column(Integer, ForeignKey('incubator.id'))
     time = Column(DateTime)
     s3_filepath = Column(String(500))
@@ -35,7 +35,7 @@ class RawImage(Base):
 
 class Image(Base):
     __tablename__ = 'image'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     raw_image_id = Column(Integer, ForeignKey('raw_image.id'))
     processing_method = Column(String(500))
     plant_id = Column(Integer, ForeignKey('plant.id'))
@@ -44,7 +44,7 @@ class Image(Base):
 
 class Analysis(Base):
     __tablename__ = 'analysis'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     image_id = Column(Integer, ForeignKey('image.id'))
     size = Column(Float)
     health = Column(Float)
@@ -52,7 +52,7 @@ class Analysis(Base):
 
 class Sensor(Base):
     __tablename__ = 'sensor'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     incubator_id = Column(Integer, ForeignKey('incubator.id'))
     time = Column(DateTime)
     temperature = Column(Float)
@@ -70,5 +70,5 @@ class Sensor(Base):
 
 class Incubator(Base):
     __tablename__ = 'incubator'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True,)
     number = Column(Integer)
