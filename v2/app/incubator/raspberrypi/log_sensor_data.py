@@ -72,6 +72,7 @@ def upload_record_to_database(value_dict):
     for k, v in value_dict.items():
         setattr(obj, k, v)
     session.add(obj)
+    logger.info('Attempting to add: {}'.format(str(obj)))
     session.commit()
     return obj
 
