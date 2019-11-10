@@ -33,6 +33,11 @@ data_2/
 *.tfstate*
 *.terraform/
 
+#AlembicVersions
+################
+*/alembic/versions/*
+
 #VS Code Files
 ##############
 *.vscode
+.python-version
