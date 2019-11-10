@@ -36,8 +36,8 @@ ser = serial.Serial('/dev/ttyUSB0', 9600)
 
 #-set regex map to parse label input
 regex_map = [
-    ('temperature', r'^Temp.* = ([\d\.]*)$', ),
-    ('humidity', r'^Hum.* = ([\d\.]*)$', ),
+    ('temperature', r'Temp.*=\s+([\d\.]+)', ),
+    ('humidity', r'Hum.*=\s+([\d\.]+)', ),
     ('light', r'lights are (\w+)', ),
 ]
 
