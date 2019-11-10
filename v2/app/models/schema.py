@@ -59,6 +59,11 @@ class Sensor(Base):
     humidity = Column(Float)
     light = Column(Integer)
 
+    def __repr__(self):
+        return (f"Sensor(id={self.id}, incubator_id={self.incubator_id}, "
+                f"time={self.time}, temperature={self.temperature}, "
+                f"humidity={self.time}, light={self.temperature})")
+
 
 class Incubator(Base):
     __tablename__ = 'incubator'
