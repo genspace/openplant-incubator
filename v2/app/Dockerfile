@@ -4,13 +4,12 @@ FROM python:3.6
 # Create working directory
 WORKDIR /app
 
-# Install any needed packages specified in requirements.txt
-COPY requirements.txt /app
-RUN pip install -r requirements.txt
+# Copy and install requirements
+COPY requirements.txt /app/
+RUN pip3 install -r requirements.txt
 
-# Copy models
-COPY ./models /app/models
+# Copy all contents to docker container
+COPY . /app/
 
 # Run setup.py file in app
-COPY setup.py /app
-CMD python setup.py
+CMD ["python", "setup.py"]
