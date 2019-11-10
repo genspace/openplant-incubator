@@ -51,7 +51,7 @@ def add_line_to_dict(e, value_dict):
         if reg:
             val = reg.group(1)
             value_dict.update({label: val})
-            logger.info(f'Parsed: ({label}, {val})')
+            logger.info('Parsed: ({}, {})'.format(label, val))
             return value_dict
     return None
 
@@ -89,7 +89,7 @@ def main():
             add_line_to_dict(line, value_dict)
         if check_dict_completion(value_dict):
             obj = upload_record_to_database(value_dict)
-            logger.info(f'Loaded: {obj}')
+            logger.info('Loaded: {}'.format(obj))
         value_dict = dict()
     return None
 

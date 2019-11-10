@@ -60,9 +60,12 @@ class Sensor(Base):
     light = Column(Integer)
 
     def __repr__(self):
-        return (f"Sensor(id={self.id}, incubator_id={self.incubator_id}, "
-                f"time={self.time}, temperature={self.temperature}, "
-                f"humidity={self.time}, light={self.temperature})")
+        return ("Sensor(id=%s, incubator_id=%s, "
+                "time=%s, temperature=%s, "
+                "humidity=%s, light=%s" % 
+                (self.id, self.incubator_id,
+                 self.time, self.temperature,
+                 self.humidity, self.light))
 
 
 class Incubator(Base):
