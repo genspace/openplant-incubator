@@ -47,7 +47,7 @@ def add_line_to_dict(e, value_dict):
     Simple function to parse serial line
     """
     for label, regex in regex_map:
-        reg = re.search(e, regex)
+        reg = re.search(regex, e)
         if reg:
             val = reg.group(1)
             value_dict.update({label: val})
@@ -87,6 +87,7 @@ def main():
             line = ser.readline().decode("utf-8")
             logger.info(line)
             add_line_to_dict(line, value_dict)
+            logger.info(str(value_dict))
         if check_dict_completion(value_dict):
             obj = upload_record_to_database(value_dict)
             logger.info('Loaded: {}'.format(obj))
