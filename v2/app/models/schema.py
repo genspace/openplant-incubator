@@ -63,7 +63,7 @@ class Sensor(Base):
     def __repr__(self):
         return (("<Sensor(id=%s, incubator_id=%s, "
                 "time=%s, temperature=%s, "
-                "humidity=%s, light=%s") %
+                "humidity=%s, light=%s)>") %
                 (self.id, self.incubator_id,
                  self.time, self.temperature,
                  self.humidity, self.light))
