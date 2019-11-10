@@ -50,10 +50,10 @@ def add_line_to_dict(e, value_dict):
         reg = re.search(regex, e)
         if reg:
             val = reg.group(1)
-            value_dict.update({label: val})
+            value_dict[label] = val
             logger.info('Parsed: ({}, {})'.format(label, val))
-            return value_dict
-    return None
+            break
+    return value_dict
 
 
 def check_dict_completion(value_dict):
@@ -86,7 +86,7 @@ def main():
         if(ser.in_waiting > 0):
             line = ser.readline().decode("utf-8")
             logger.info(line)
-            add_line_to_dict(line, value_dict)
+            value_dict = add_line_to_dict(line, value_dict)
             logger.info(str(value_dict))
         if check_dict_completion(value_dict):
             obj = upload_record_to_database(value_dict)
