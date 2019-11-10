@@ -1,23 +1,31 @@
-version: '3'
+version: "3"
 services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    environment:
+      MYSQL_USER: $DB_USER
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_PASSWORD: $DB_PASSWORD
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+    volumes:
+      - db-data:/var/lib/mysql
+
   app:
     image: openplant:latest
     build:
       context: ./app/
     volumes:
-      - "./alembic:/app/alembic"
+      - ./alembic:/app/alembic
     env_file:
       - db.env
-  db:
-    container_name: openplant_db
-    image: mariadb
-    restart: always
-    environment:
-      MYSQL_DATABASE: openplant
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - openplant-data:/var/lib/mysql
+    depends_on:
+      - db
 
 volumes:
-  openplant-data: {}
+  db-data:
 
