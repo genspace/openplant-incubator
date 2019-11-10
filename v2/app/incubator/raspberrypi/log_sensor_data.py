@@ -71,8 +71,8 @@ def upload_record_to_database(value_dict):
     obj.time = dt.datetime.today()
     for k, v in value_dict.items():
         setattr(obj, k, v)
+    logger.info(str(obj))
     session.add(obj)
-    logger.info('Attempting to add: {}'.format(str(obj)))
     session.commit()
     return obj
 
