@@ -52,6 +52,7 @@ class Analysis(Base):
 
 class Sensor(Base):
     __tablename__ = 'sensor'
+
     id = Column(Integer, primary_key=True, autoincrement=True,)
     incubator_id = Column(Integer, ForeignKey('incubator.id'))
     time = Column(DateTime)
@@ -60,9 +61,9 @@ class Sensor(Base):
     light = Column(Integer)
 
     def __repr__(self):
-        return ("Sensor(id=%s, incubator_id=%s, "
+        return (("<Sensor(id=%s, incubator_id=%s, "
                 "time=%s, temperature=%s, "
-                "humidity=%s, light=%s" % 
+                "humidity=%s, light=%s") %
                 (self.id, self.incubator_id,
                  self.time, self.temperature,
                  self.humidity, self.light))
