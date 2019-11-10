@@ -30,11 +30,12 @@ session = Session(bind=engine)
 
 #-get incubator id
 def get_incubator_id():
-    incubator_id =\
+    query_result =\
         session.query(Incubator.id)\
                .filter(Incubator.number == incubator_number)\
                .first()
-    if incubator_id:
+    if query_result:
+        incubator_id = query_result[0]
         logger.info('Incubator ID: {}'.format(incubator_id))
     elif re.match('\d+$', incubator_number):
         logger.info('Encountered new incubator number: {}'
