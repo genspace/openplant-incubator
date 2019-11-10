@@ -30,16 +30,25 @@ session = Session(bind=engine)
 
 #-get incubator id
 def get_incubator_id():
-    query_result =\
+    incubator_id =\
         session.query(Incubator.id)\
                .filter(Incubator.number == incubator_number)\
                .first()
-    if len(query_result) > 0:
-        incubator_id = query_result[0]
+    if incubator_id:
         logger.info('Incubator ID: {}'.format(incubator_id))
+    elif re.match('\d+$', incubator_number):
+        logger.info('Encountered new incubator number: {}'
+                    .format(incubator_number))
+        logger.info('Adding to database')
+        obj = Incubator()
+        obj.number = incubator_number
+        session.add(obj)
+        session.commit()
+        incubator_id = get_incubator_id()
+        logger.info('Added new incubator: {}'.format(incubator_id))
     else:
         logger.error('Invalid incubator number: {}'
-                      .format(incubator_number))
+                     .format(incubator_number))
         raise ValueError('INVALID INCUBATOR NUMBER!')
     return incubator_id
 
