@@ -23,6 +23,7 @@ services:
       - ./alembic:/app/alembic
     env_file:
       - db.env
+      - incubator.env
     depends_on:
       - db
 
