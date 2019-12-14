@@ -72,4 +72,4 @@ class Sensor(Base):
 class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True, autoincrement=True,)
-    number = Column(Integer)
+    number = Column(Integer, unique=True)
