@@ -132,7 +132,7 @@ def main():
             obj = upload_record_to_database(value_dict, incubator_id)
             logger.info('Loaded: {}'.format(obj))
             value_dict = dict()
-        time.sleep(60 ** 5)
+        time.sleep(60 * 5)
         ser.flushInput()
     return None
 
