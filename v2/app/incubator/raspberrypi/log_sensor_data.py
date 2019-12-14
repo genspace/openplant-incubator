@@ -7,6 +7,7 @@ into the database
 
 import re
 import os
+import time
 import uuid
 import serial
 import logging
@@ -131,7 +132,10 @@ def main():
             obj = upload_record_to_database(value_dict, incubator_id)
             logger.info('Loaded: {}'.format(obj))
             value_dict = dict()
+        time.sleep(60 ** 5)
+        ser.flushInput()
     return None
+
 
 if __name__ == '__main__':
     main()
