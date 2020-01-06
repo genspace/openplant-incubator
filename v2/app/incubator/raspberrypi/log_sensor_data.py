@@ -22,6 +22,9 @@ logging.basicConfig()
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+#-set sleep time
+SLEEP_TIME = 60 * 60
+
 #-get incubator id from environment
 incubator_number = os.environ['INCUBATOR_NUMBER']
 
@@ -121,19 +124,23 @@ def main():
     """
     ser.flushInput()
     value_dict = dict()
+    logger.info('initiating main sequence')
     incubator_id = get_incubator_id()
     while 1:
-        if(ser.in_waiting > 0):
+        logger.info(ser.in_waiting)
+        if (ser.in_waiting > 0):
+            logger.info('reading serial')
             line = ser.readline().decode("utf-8")
             logger.info(line)
             add_line_to_dict(line, value_dict)
             logger.info(str(value_dict))
         if check_dict_completion(value_dict):
+            logger.info('loading values to db')
             obj = upload_record_to_database(value_dict, incubator_id)
-            logger.info('Loaded: {}'.format(obj))
+            logger.info('loaded: {}'.format(obj))
             value_dict = dict()
-        time.sleep(60 * 5)
-        ser.flushInput()
+            time.sleep(SLEEP_TIME)
+            ser.flushInput()
     return None
 
 
