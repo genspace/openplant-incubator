@@ -7,9 +7,15 @@ WORKDIR /app
 # Copy and install requirements
 COPY requirements.txt /app/
 RUN pip3 install -r requirements.txt
+RUN pip install jupyter -U && pip install jupyterlab
 
 # Copy all contents to docker container
 COPY . /app/
 
 # Run setup.py file in app
-CMD ["python", "setup.py"]
+ENTRYPOINT [ "jupyter", "lab", \
+             "--no-browser", \
+             "--ip=0.0.0.0", \
+             "--allow-root", \
+             "--NotebookApp.token=''", \
+             "--NotebookApp.password=''" ]

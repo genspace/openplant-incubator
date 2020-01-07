@@ -1,0 +1,17 @@
+version: "3"
+services:
+  app:
+    image: openplant:latest
+    build:
+      context: ./app/
+    volumes:
+      - ./alembic:/app/alembic
+    env_file:
+      - db.env
+      - incubator.env
+    ports:
+      - 8899:8888
+
+volumes:
+  db-data:
+

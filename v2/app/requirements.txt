@@ -2,3 +2,6 @@ alembic
 pandas
 PyMySQL
 sqlalchemy
+opencv-python
+matplotlib
+boto3
