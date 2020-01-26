@@ -16,8 +16,8 @@
 #include "Adafruit_SHT31.h"
 #include "RTClib.h"           // library for the RTC
 
-const float peltier_on_threshold = 25.0;
-const float peltier_off_threshold = 24.0;
+const float peltier_on_threshold = 16.5;
+const float peltier_off_threshold = 15.5;
 
 const int fan = 3;  // we just run the fans constantly with no input or output, as Danny did
 const int lights = 4;
