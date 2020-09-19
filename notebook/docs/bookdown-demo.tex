@@ -1,0 +1,472 @@
+\documentclass[]{book}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={A Minimal Book Example},
+            pdfauthor={Yihui Xie},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{apalike}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{A Minimal Book Example}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Yihui Xie}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-10-19}
+
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{prerequisites}{%
+\chapter{Prerequisites}\label{prerequisites}}
+
+This is a \emph{sample} book written in \textbf{Markdown}. You can use anything that Pandoc's Markdown supports, e.g., a math equation \(a^2 + b^2 = c^2\).
+
+The \textbf{bookdown} package can be installed from CRAN or Github:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"bookdown"}\NormalTok{)}
+\CommentTok{# or the development version}
+\CommentTok{# devtools::install_github("rstudio/bookdown")}
+\end{Highlighting}
+\end{Shaded}
+
+Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading \texttt{\#}.
+
+To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): \url{https://yihui.name/tinytex/}.
+
+\hypertarget{general-use-cases}{%
+\chapter{General Use Cases}\label{general-use-cases}}
+
+As a plant researcher, I would like to have an incubator that can be controlled:
+
+\begin{itemize}
+\item
+  Create schedule for light
+\item
+  Keep temperature constant
+\item
+  Keep humidity constant
+\end{itemize}
+
+As a plant researcher, I would like to capture periodic data about plants:
+
+\begin{itemize}
+\item
+  Pictures - once a minute
+\item
+  Temperature - once a minute
+\item
+  Humidity - once a minute
+\end{itemize}
+
+As a plant researcher, I would like to have the data available in the cloud:
+
+\begin{itemize}
+\item
+  Store all data on the cloud
+\item
+  View data in real time on a Web site
+\end{itemize}
+
+As a plant researcher, I would like to be able to interact with the incubator in the cloud:
+
+\begin{itemize}
+\item
+  Receive alerts when the connection is down, or temperature is incorrect
+\item
+  Ability to change temperature and/or light settings via a Web interface
+\end{itemize}
+
+As a plant researcher, I would like to able to use analytics on the data that is captured from the incubator
+
+\hypertarget{raspberry-pi}{%
+\chapter{Raspberry Pi}\label{raspberry-pi}}
+
+Flash Raspbian to an SD card.
+
+\begin{itemize}
+\item
+  Download Raspbian Stretch Lite (raspberry pi operating system image) from \href{https://www.raspberrypi.org/downloads/raspbian/}{here}.
+\item
+  Download Etcher (a utility which helps you flash an image to an SD card) \href{https://www.balena.io/etcher/}{here}.
+\item
+  Flash Raspbian on a MicroSD card using Etcher.
+\end{itemize}
+
+Enable SSH server before the first boot of the Raspberry Pi.
+
+\begin{itemize}
+\item
+  View the MicroSD card on your computer.
+\item
+  Find the ``boot'' partition. Right click and open a terminal.
+\item
+  Make a file (with nothing in it) called ``ssh'' (no quotes.)
+\item
+  Add a wpa\_supplicant.conf file (See Appendix A). Copy and paste the file contents from Appendix A
+\item
+  Change the hostname. (The Raspberry Pi image comprises two partitions. ``root'' and ``boot''. Boot is readable on all operating systems (if you insert the sd card into your laptop or whatever.) Root is only readable on Linux? Maybe Mac?) This can be done in the /rootfs directory. Name your raspberry pi by changing the `hostname' and `hosts'.
+\end{itemize}
+
+Boot the Raspbian OS on the Raspberry Pi
+
+\begin{itemize}
+\item
+  Plug the microSD card into the Pi.
+\item
+  Power the raspberry pi with a suitable power adapter (or from the computer.)
+\item
+  Open Terminal. Find the Raspberry Pi on the network. \texttt{ping\ raspberrypi.local} - if it is working, press ctrl c to stop
+\item
+  Install nmap with \texttt{sudo\ apt\ install\ nmap}. Type: \texttt{sudo\ nmap\ -sP\ 192.168.1.0/24\ \textbar{}\ awk\ \textquotesingle{}/\^{}Nmap/\{ip=\$NF\}/B8:27:EB/\{print\ ip\}\textquotesingle{}} to find the ip address of the Pi.
+\end{itemize}
+
+Log into the Pi
+
+\begin{itemize}
+\item
+  Type \texttt{ssh\ pi@raspberrypi.local} or \texttt{ssh\ pi@\{ip-address\}} where ip-address is the one from the command directly above. Accept the ``host key fingerprint'' which you are told to check. During this step, you are vulnerable to a man-in-the-middle attack. Let's assume that there is no one on the Wi-Fi who is trying to attack you. There are ways to avoid this security hole. (I.e. confirm the host key on the SD card after the first boot, but before you ever log in via SSH.
+\item
+  Enter the password ``raspberry''. You should change this.
+\item
+  (New and temporary fix) As per this \href{https://www.techrepublic.com/article/how-to-disable-ipv6-on-linux/}{article}, disable Internet Protocol version 6, as it does not play well with the Genspace Internet Service Provider. Run the following commands in a terminal window:
+\end{itemize}
+
+\begin{verbatim}
+sudo nano /etc/sysctl.conf
+# Add the following three lines to the bottom of the file:
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+#Save and close the file.
+#Reboot the machine.
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Run \texttt{sudo\ apt-get\ update\ \&\&\ sudo\ apt-get\ -y\ upgrade} to update the system
+\item
+  run \texttt{sudo\ raspi-config}. In raspi-config turn on the camera and I2C in ``Interfacing Options''. Localization Settings → Keyboard Config → Generic 105 (accept default) → English US → English us → accept all defaults
+\item
+  Reboot
+\item
+  Load camera code onto pi.
+\item
+  Install the picamera library for python: \texttt{sudo\ apt-get\ install\ python3-picamera}
+\item
+  The code example uses an AWS s3 bucket to upload the files but you can choose whichever service you want.
+\end{itemize}
+
+AWS Uploading Notes
+
+\begin{itemize}
+\item
+  Install the awscli program: \texttt{sudo\ apt-get\ install\ awscli}
+\item
+  Configure the awscli program: \texttt{aws\ configure}
+\end{itemize}
+
+Camera auto-start directions
+
+To make the program start automatically on reboot, I edited the /etc/rc.local file as follows:
+
+\begin{verbatim}
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+su pi -c 'python3 /home/pi/kris_camera.py &'
+exit 0
+\end{verbatim}
+
+\textbf{Fill In Code For Connecting Arduino And Serial Script}
+
+\hypertarget{the-container}{%
+\chapter{The Container}\label{the-container}}
+
+Notes
+
+\begin{itemize}
+\tightlist
+\item
+  Designed for both Petri and `square dishes' - 4 dishes
+\item
+  29cm wide interior
+\item
+  35cm long interior
+\item
+  20cm high
+\item
+  Petri dishes are 9cm in diameter
+\item
+  Square dishes are 10.2cm on four sides, and 7.49cm high
+\item
+  Peltier+ device is 5+ cm both inside and outside
+\end{itemize}
+
+BRING LIST
+* Duct tape
+* Box corners
+* Popsicle sticks
+* Electrical tape
+* Scissors
+* Foam core (0.25 inch thick)
+* Box cutter and or pocket knife
+
+Polystyrene - 6 pieces and maybe some extra
+* Bottom is longer in both directions
+* Longer side is longer
+* Shorter side is the same
+
+Electronics
+* List is on github
+* Waldo has many items
+* Kris to order lights
+
+The picture is below. The desired measurements details are as follows:
+
+20cm by 29cm by 35cm
+If building, the bottom/top should longer in both directions. So, if the polystyrene is one inch thick, this means the bottom should be 2 inches (or 5+cm) longer in each dimension.
+The longer two side panels should be 2 inches (or 5+cm) longer in just the length
+The shorter two side panels should not have any additions
+So
+2 x (34 x 40cm)
+2 x (20cm x 40cm)
+2 x (20cm by 29 cm)
+
+\hypertarget{arduino}{%
+\chapter{Arduino}\label{arduino}}
+
+The layout for the Arduino. What you need:
+
+\begin{itemize}
+\item
+  Arduino (Uno)
+\item
+  \href{https://cdn.sparkfun.com/datasheets/Components/General/FQP30N06L.pdf}{Mosfet} x 2
+\item
+\end{itemize}
+
+Check the code (incubator\_main.ino in \url{https://github.com/genspace/openplant-incubator}) for which pins on the Arduino to connect the lights and Peltier to. As of 10/12/19, the lights go to pin 4 and the Peltier goes to pin 5.
+
+The Mosfet, I think it's the one above, or the one in the link below. You can always to a Google search on the.
+\url{https://cdn.sparkfun.com/datasheets/Components/General/FQP30N06L.pdf}
+
+The Peltier Module TEC1-12706
+\url{https://www.electron.com/media/389/datasheet-601-017.pdf?\&key=ZGpmIyQwNUZfMzg5}
+
+Wire the Temperature/Humidity sensor (SHT31) according to this diagram:
+
+Fan Wiring:
+We don't need to wire Sense or Control because we leave the fans always on.
+\url{https://allpinouts.org/pinouts/connectors/motherboards/motherboard-cpu-4-pin-fan/}
+
+Real Time Clock wiring
+GND to GND on your board
+VCC to the logic level power of your board (on classic Arduinos \& Metros use 5V, on 3.3V devices use 3.3V)
+SDA to the SDA i2c data pin (A4)
+SCL to the SCL i2c clock pin (A5)
+
+\url{https://learn.adafruit.com/adafruit-pcf8523-real-time-clock/rtc-with-arduino}
+\url{https://learn.adafruit.com/adafruit-metro-mini/pinouts}
+Set the time by running the example script: \url{https://github.com/adafruit/RTClib/blob/master/examples/pcf8523/pcf8523.ino}
+
+Power Supply goes into the rails -- black into one, and red into another..
+
+Uploading code into an Arduino (in our case the Adafruit Metro Mini, which is equivalent to the Arduino Uno.)
+
+Install the Arduino IDE
+
+Open the IDE. (This gives a blank document. Just ``setup()'' and ``loop()'' functions
+
+Select the board. (In tools?)
+
+Select the serial device which you're using. (Windows? COM1 ?)
+
+Lots of restarting if the serial port is not found.
+
+Open a (second) window using File → Examples → Basic(?) → Blink
+
+Build and upload buttons are the check mark and the arrow, respectively
+
+\hypertarget{final-words}{%
+\chapter{Final Words}\label{final-words}}
+
+We have finished a nice book.
+
+Raspberry Pi Onboard LEDs: \href{https://raspberrypi.stackexchange.com/questions/44168/how-can-i-control-the-red-led-again/61955\#61955}{Guide}
+
+\begin{verbatim}
+sudo sh -c "echo none > /sys/class/leds/led0/trigger"         # Static LED off 
+sudo sh -c "echo default-on > /sys/class/leds/led0/trigger"   # Static LED on 
+sudo sh -c "echo mmc0 > /sys/class/leds/led0/trigger"         # The normal behaviour
+\end{verbatim}
+
+Appendix A
+
+Configuring what WiFi access point the Raspberry Pi will connect to before booting it for the first time. (This way, you don't need a monitor and keyboard to configure the Pi.)
+Put the ``ssh'' file (empty) in the ``boot'' partition of the SD card. (Already mentioned in the main steps.)
+Put this in a text file named ``wpa\_supplicant.conf'' in the ``boot'' partition of the SD card.
+
+\begin{verbatim}
+country=US
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+    ssid="Genspace"
+    scan_ssid=1
+    psk="Microbes"
+    key_mgmt=WPA-PSK
+}
+\end{verbatim}
+
+Additional Raspberry Pi Notes
+
+auto re-start
+
+\$ su pi -c `python3 /home/pi/kris\_camera.py \&'
+
+Alternatively, this can be done with the `pi' user's crontab.
+
+Camera / Tongue Depressor measurements:
+
+The Camera should be inches from bottom. (Let's say 6 or 7 inches)
+Square easier than round. Exacto-type knife is better than drilling for tongue depressors.
+The camera has a lens holder that is circular -- 0.289 inches in diameter
+The square pieces that holds the camera is 0.336 inches in diameter.
+
+Check this link for camera resolution: \url{https://picamera.readthedocs.io/en/release-1.12/fov.html}
+
+\bibliography{book.bib,packages.bib}
+
+
+\end{document}
