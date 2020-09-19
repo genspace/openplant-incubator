@@ -12,6 +12,7 @@ import cv2
 # Object Size: https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv/
 
 def midpoint(ptA, ptB):
+
 	return ((ptA[0] + ptB[0]) * 0.5, (ptA[1] + ptB[1]) * 0.5)
 
 def get_area_green(color_features):
@@ -19,6 +20,7 @@ def get_area_green(color_features):
 	Gets area of green channel of image from the output of color_hist
 	"""
 	result = np.trapz([pixel_val[0] for pixel_val in color_features])
+
 	return(result)
 
 def color_hist(image):

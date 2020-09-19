@@ -1,4 +1,4 @@
-from funcs_processing import * 
+from photo_pipeline import processing as pcs
 from PIL import Image
 import time
 import matplotlib.image as mpimg
@@ -17,23 +17,12 @@ def identification():
     
 def main():
 
-    print(5)
-
-    start = time.time()
-
-    img, fname = "20190525_153521.jpg", "test.png"
-
-    print(img, fname)
-
-    img_raw = cv2.imread("../data/raw/" + img, cv2.IMREAD_COLOR)
-    img, circle = prep_image(img_raw)
-    img_circle = draw_circle(img, circle)
-    
-    #plt.imshow(img_raw) plt.show(img_circle)
-    
-    mpimg.imsave("../data/processed/" + fname, img_circle/255)
-
-    print(time.time() - start)
+    img = "20190525_153521.jpg"
+    img_raw = cv2.imread(img, cv2.IMREAD_COLOR)
+    img, circle = pcs.prep_image(img_raw)
+    img_circle = pcs.draw_circle(img, circle) 
+  
+    mpimg.imsave("cropped_" + img, img_circle/255)
 
 if __name__ == "__main__":
     main()
