@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Raspberry Pi | A Minimal Book Example</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Raspberry Pi | A Minimal Book Example" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Raspberry Pi | A Minimal Book Example" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Yihui Xie" />
+
+
+<meta name="date" content="2019-10-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="general-use-cases.html"/>
+<link rel="next" href="the-container.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="general-use-cases.html"><a href="general-use-cases.html"><i class="fa fa-check"></i><b>2</b> General Use Cases</a></li>
+<li class="chapter" data-level="3" data-path="raspberry-pi.html"><a href="raspberry-pi.html"><i class="fa fa-check"></i><b>3</b> Raspberry Pi</a></li>
+<li class="chapter" data-level="4" data-path="the-container.html"><a href="the-container.html"><i class="fa fa-check"></i><b>4</b> The Container</a></li>
+<li class="chapter" data-level="5" data-path="arduino.html"><a href="arduino.html"><i class="fa fa-check"></i><b>5</b> Arduino</a></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="raspberry-pi" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Raspberry Pi</h1>
+<p>Flash Raspbian to an SD card.</p>
+<ul>
+<li><p>Download Raspbian Stretch Lite (raspberry pi operating system image) from <a href="https://www.raspberrypi.org/downloads/raspbian/">here</a>.</p></li>
+<li><p>Download Etcher (a utility which helps you flash an image to an SD card) <a href="https://www.balena.io/etcher/">here</a>.</p></li>
+<li><p>Flash Raspbian on a MicroSD card using Etcher.</p></li>
+</ul>
+<p>Enable SSH server before the first boot of the Raspberry Pi.</p>
+<ul>
+<li><p>View the MicroSD card on your computer.</p></li>
+<li><p>Find the “boot” partition. Right click and open a terminal.</p></li>
+<li><p>Make a file (with nothing in it) called “ssh” (no quotes.)</p></li>
+<li><p>Add a wpa_supplicant.conf file (See Appendix A). Copy and paste the file contents from Appendix A</p></li>
+<li><p>Change the hostname. (The Raspberry Pi image comprises two partitions. “root” and “boot”. Boot is readable on all operating systems (if you insert the sd card into your laptop or whatever.) Root is only readable on Linux? Maybe Mac?) This can be done in the /rootfs directory. Name your raspberry pi by changing the ‘hostname’ and ‘hosts’.</p></li>
+</ul>
+<p>Boot the Raspbian OS on the Raspberry Pi</p>
+<ul>
+<li><p>Plug the microSD card into the Pi.</p></li>
+<li><p>Power the raspberry pi with a suitable power adapter (or from the computer.)</p></li>
+<li><p>Open Terminal. Find the Raspberry Pi on the network. <code>ping raspberrypi.local</code> - if it is working, press ctrl c to stop</p></li>
+<li><p>Install nmap with <code>sudo apt install nmap</code>. Type: <code>sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'</code> to find the ip address of the Pi.</p></li>
+</ul>
+<p>Log into the Pi</p>
+<ul>
+<li><p>Type <code>ssh pi@raspberrypi.local</code> or <code>ssh pi@{ip-address}</code> where ip-address is the one from the command directly above. Accept the “host key fingerprint” which you are told to check. During this step, you are vulnerable to a man-in-the-middle attack. Let’s assume that there is no one on the Wi-Fi who is trying to attack you. There are ways to avoid this security hole. (I.e. confirm the host key on the SD card after the first boot, but before you ever log in via SSH.</p></li>
+<li><p>Enter the password “raspberry”. You should change this.</p></li>
+<li><p>(New and temporary fix) As per this <a href="https://www.techrepublic.com/article/how-to-disable-ipv6-on-linux/">article</a>, disable Internet Protocol version 6, as it does not play well with the Genspace Internet Service Provider. Run the following commands in a terminal window:</p></li>
+</ul>
+<pre><code>sudo nano /etc/sysctl.conf
+# Add the following three lines to the bottom of the file:
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+#Save and close the file.
+#Reboot the machine.</code></pre>
+<ul>
+<li><p>Run <code>sudo apt-get update &amp;&amp; sudo apt-get -y upgrade</code> to update the system</p></li>
+<li><p>run <code>sudo raspi-config</code>. In raspi-config turn on the camera and I2C in “Interfacing Options”. Localization Settings → Keyboard Config → Generic 105 (accept default) → English US → English us → accept all defaults</p></li>
+<li><p>Reboot</p></li>
+<li><p>Load camera code onto pi.</p></li>
+<li><p>Install the picamera library for python: <code>sudo apt-get install python3-picamera</code></p></li>
+<li><p>The code example uses an AWS s3 bucket to upload the files but you can choose whichever service you want.</p></li>
+</ul>
+<p>AWS Uploading Notes</p>
+<ul>
+<li><p>Install the awscli program: <code>sudo apt-get install awscli</code></p></li>
+<li><p>Configure the awscli program: <code>aws configure</code></p></li>
+</ul>
+<p>Camera auto-start directions</p>
+<p>To make the program start automatically on reboot, I edited the /etc/rc.local file as follows:</p>
+<pre><code>_IP=$(hostname -I) || true
+if [ &quot;$_IP&quot; ]; then
+  printf &quot;My IP address is %s\n&quot; &quot;$_IP&quot;
+fi
+su pi -c &#39;python3 /home/pi/kris_camera.py &amp;&#39;
+exit 0</code></pre>
+<p><strong>Fill In Code For Connecting Arduino And Serial Script</strong></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="general-use-cases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="the-container.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-raspberry-pi.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
