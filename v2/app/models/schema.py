@@ -6,23 +6,33 @@ Main schema file
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
-    Column, ForeignKey, String, Integer, Float, DateTime
+    Column, ForeignKey, String, Integer, Float, DateTime, JSON, Date
 )
+
 
 Base = declarative_base()
 
-class Plant(Base):
+
+class Sample(Base):
     __tablename__ = 'plant'
     id = Column(Integer, primary_key=True, autoincrement=True,)
     experiment_id = Column(Integer, ForeignKey('experiment.id'))
-    barcode = Column(Integer)
+    barcode = Column(Integer, unique=True)
+    metadata = Column(JSON)
+    notes = Column(JSON)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class Experiment(Base):
     __tablename__ = 'experiment'
     id = Column(Integer, primary_key=True, autoincrement=True,)
-    vector = Column(String(500))
-    description = Column(String(500))
+    control_id = Column(Integer, ForeignKey('experiment.id'))
+    plasmid_id = Column(Integer, ForeignKey('plasmid.id'))
+    description = Column(String)
+    date_initiated = Column(Date)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class RawImage(Base):
@@ -73,3 +83,10 @@ class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True, autoincrement=True,)
     number = Column(Integer, unique=True)
+
+
+class Plasmid(Base):
+    __tablename__ = 'plasmid'
+    id = Column(Integer, primary_key=True, autoincrement=True,)
+    name = Column(String, unique=True)
+    metadata = Column(JSON)
