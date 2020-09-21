@@ -14,7 +14,7 @@ Base = declarative_base()
 
 
 class Sample(Base):
-    __tablename__ = 'plant'
+    __tablename__ = 'sample'
     id = Column(Integer, primary_key=True, autoincrement=True,)
     experiment_id = Column(Integer, ForeignKey('experiment.id'))
     barcode = Column(Integer, unique=True)
@@ -48,7 +48,7 @@ class Image(Base):
     id = Column(Integer, primary_key=True, autoincrement=True,)
     raw_image_id = Column(Integer, ForeignKey('raw_image.id'))
     processing_method = Column(String(500))
-    plant_id = Column(Integer, ForeignKey('plant.id'))
+    sample_id = Column(Integer, ForeignKey('sample.id'))
     s3_filepath = Column(String(500))
 
 
