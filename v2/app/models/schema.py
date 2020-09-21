@@ -18,7 +18,7 @@ class Sample(Base):
     id = Column(Integer, primary_key=True, autoincrement=True,)
     experiment_id = Column(Integer, ForeignKey('experiment.id'))
     barcode = Column(Integer, unique=True)
-    metadata = Column(JSON)
+    sample_data = Column(JSON)
     notes = Column(JSON)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
@@ -29,7 +29,7 @@ class Experiment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True,)
     control_id = Column(Integer, ForeignKey('experiment.id'))
     plasmid_id = Column(Integer, ForeignKey('plasmid.id'))
-    description = Column(String)
+    description = Column(String(500))
     date_initiated = Column(Date)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
@@ -88,5 +88,5 @@ class Incubator(Base):
 class Plasmid(Base):
     __tablename__ = 'plasmid'
     id = Column(Integer, primary_key=True, autoincrement=True,)
-    name = Column(String, unique=True)
-    metadata = Column(JSON)
+    name = Column(String(500), unique=True)
+    plasmid_data = Column(JSON)
