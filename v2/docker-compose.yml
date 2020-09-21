@@ -1,12 +1,11 @@
 version: "3"
 services:
+
   db:
     image: mariadb
     restart: always
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
+      - $DB_PORT:$DB_PORT
     environment:
       MYSQL_USER: $DB_USER
       MYSQL_DATABASE: $DB_NAME
@@ -26,6 +25,11 @@ services:
       - incubator.env
     depends_on:
       - db
+
+  metabase:
+    image: metabase/metabase
+    ports:
+      - 3000:3000
 
 volumes:
   db-data:
