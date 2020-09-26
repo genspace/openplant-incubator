@@ -43,3 +43,4 @@ data_2/
 ##############
 *.vscode
 .python-version
+v2/db.env
