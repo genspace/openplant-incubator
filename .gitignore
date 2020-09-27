@@ -9,7 +9,7 @@
 #################
 *.Rmd
 data/
-
+test/
 #DB Data Files
 db-data/
 
