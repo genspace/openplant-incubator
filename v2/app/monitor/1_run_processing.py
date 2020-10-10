@@ -1,29 +1,31 @@
+# python 1_run_processing.py --name=IMG_20200326_174326.jpg
+
+import cv2
 from photo_pipeline import processing as pcs
 from PIL import Image
 import time
 import matplotlib.image as mpimg
-import click
-    
-@click.command()
-@click.option('--img')
-@click.option('--fn')
-def get_data(img, fn):
-    return(img, fn)
+import fire
+import os.path
 
 def identification():
     
     band_pic, cser = band_wrap(img, circle)
     band_ct = count_bands(cser)
     
-def main():
+    return(1)
+    
+def process(img_name):
 
-    img = "20190525_153521.jpg"
-    img_raw = cv2.imread(img, cv2.IMREAD_COLOR)
+    img_raw = cv2.imread(img_name, cv2.IMREAD_COLOR)
     img, circle = pcs.prep_image(img_raw)
     img_circle = pcs.draw_circle(img, circle) 
-  
-    mpimg.imsave("cropped_" + img, img_circle/255)
+    output_path = os.path.dirname(img_name) + "/cropped_" + os.path.basename(img_name)
+    
+    mpimg.imsave(output_path, img_circle/255)
+    
+    return(1)
 
 if __name__ == "__main__":
-    main()
+    fire.Fire(process)
 

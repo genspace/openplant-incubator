@@ -9,7 +9,7 @@
 #################
 *.Rmd
 data/
-
+test/
 #DB Data Files
 db-data/
 
@@ -21,6 +21,8 @@ db-data/
 #OS X Files
 #################
 .DS_Store
+
+openplant.Rproj
 
 #Data Directories
 #################
