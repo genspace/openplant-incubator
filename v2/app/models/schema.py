@@ -82,7 +82,7 @@ class Sensor(Base):
 class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True, autoincrement=True,)
-    number = Column(Integer, unique=True)
+    name = Column(String, unique=True)
 
 
 class Plasmid(Base):

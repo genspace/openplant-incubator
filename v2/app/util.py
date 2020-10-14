@@ -12,5 +12,4 @@ def get_connection_string():
         os.environ['DB_NAME']
     ]
     connection_string = ''.join(components)
-    print(connection_string)
     return connection_string
