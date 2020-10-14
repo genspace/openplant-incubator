@@ -77,7 +77,7 @@ def take_picture():
     t_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     filename = f"{t_stamp}.jpg"
     src_path = os.path.join(PICTURES_FOLDER, filename)
-    dst_path = "/".join(S3_PATH, filename)
+    dst_path = "/".join([S3_PATH, filename])
     took_pic = False
     try:
         with picamera.PiCamera() as camera:
