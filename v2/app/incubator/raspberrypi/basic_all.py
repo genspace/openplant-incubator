@@ -26,6 +26,10 @@ from incubator.raspberrypi.scripts import BASE_CONFIG, SCRIPT_DIR
 from incubator.util import get_connection_string
 
 
+# Ensure pip installs available
+os.system("install-requirements")
+
+
 # Create library object using our Bus I2C port
 sensor = None
 while not sensor:
@@ -83,8 +87,6 @@ def validate_incubator_name():
 
 
 def initialize_system():
-    # Ensure pip installs available
-    os.system("install-requirements")
     # Ensure picture folder exists
     os.system("mkdir -p " + PICTURES_FOLDER)
     # Lights as output and off
@@ -99,7 +101,7 @@ def get_incubator_id():
         .filter(schema.Incubator.node == uuid.getnode())
         .first()
     )
-    if not incubator:
+    if not incubator_id:
         logger.info("Incubator ID not yet created... assigning new")
         incubator_id = uuid.uuid4()
         incubator = schema.Incubator(id=incubator_id, name=INCUBATOR_NAME, node=uuid.getnode())
