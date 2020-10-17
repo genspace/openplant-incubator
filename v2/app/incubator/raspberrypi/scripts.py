@@ -34,7 +34,7 @@ def set_config():
     if not os.path.exists(cred_path):
         logger.info(f"Unpacking secrets to: {cred_path}")
         os.system(f'cp {GPG_SECRET} {cred_path}.gpg')
-        os.system(f'gpg {cred_path}.gpg')
+        os.system(f'gpg --output {cred_path} --decrypt {cred_path}.gpg')
         os.system(f'rm {cred_path}.gpg')
     # write config
     with open(BASE_CONFIG, 'w') as fin:

@@ -96,19 +96,19 @@ def initialize_system():
 
 def get_incubator_id():
     # Check to see if incubator name exists in database, if not, create
-    def get_query_incubator():
+    def query_id():
         return (
             session.query(schema.Incubator.id)
             .filter(schema.Incubator.node == uuid.getnode())
             .first()
         )
-    incubator_id = get_incubator_id()
+    incubator_id = query_id()
     if not incubator_id:
         logger.info("Incubator ID not yet created... assigning new")
         incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
-        incubator_id = get_incubator_id()
+        incubator_id = query_id()
     return incubator_id[0]
 
 
