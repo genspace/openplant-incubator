@@ -23,7 +23,7 @@ setuptools.setup(
     },
     install_requires=[
         'loguru',
-        'dotenv'
+        'python-dotenv'
     ],
     package_data={
         "incubator": [
