@@ -152,6 +152,7 @@ def write_to_database(incubator_id):
     )
     session.add(record)
     session.commit()
+    logger.info(record)
 
 
 def main():
