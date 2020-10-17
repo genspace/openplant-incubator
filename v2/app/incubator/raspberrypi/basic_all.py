@@ -22,7 +22,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 
 from models import schema
-from incubator.raspberrypi.scripts import BASE_CONFIG, SCRIPT_DIR
+from incubator.raspberrypi.scripts import BASE_CONFIG
 from incubator.util import get_connection_string
 
 
