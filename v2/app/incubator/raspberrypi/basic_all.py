@@ -15,12 +15,13 @@ import uuid
 from adafruit_htu21d import HTU21D
 import board
 import busio
+from dotenv import load_dotenv
 import picamera
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 
 from models import schema
-from incubator.raspberrypi.scripts import BASE_CONFIG
+from incubator.raspberrypi.scripts import BASE_CONFIG, SCRIPT_DIR
 from incubator.util import get_connection_string
 
 
@@ -50,8 +51,13 @@ INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
 SLEEP_INTERVAL_SEC = eval(config_params['sleep_interval_set'])
 LIGHT_TIME = eval(config_params['light_time'])
-os.environ['AWS_ACCESS_KEY_ID'] = config_params['aws_access_key_id']
-os.environ['AWS_SECRET_ACCESS_KEY'] = config_params['aws_secret_access_key']
+
+
+# Decrypt gpg if not exists, load dotenv
+dotenv_path = os.path.join(SCRIPT_DIR, 'db.env')
+if not os.path.exists(dotenv_path):
+    os.system(f'gpg {dotenv_path}')
+load_dotenv(dotenv_path)
 
 
 # Set paths for folder upload

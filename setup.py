@@ -23,11 +23,13 @@ setuptools.setup(
     },
     install_requires=[
         'loguru',
+        'dotenv'
     ],
     package_data={
         "incubator": [
             "raspberrypi/*.txt",
             "raspberrypi/*.ini",
+            "raspberrypi/*.gpg",
         ]
     },
     classifiers=[
