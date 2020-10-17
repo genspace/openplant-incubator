@@ -27,8 +27,14 @@ from incubator.util import get_connection_string
 
 
 # Create library object using our Bus I2C port
-i2c = busio.I2C(board.SCL, board.SDA)
-sensor = HTU21D(i2c)
+sensor = None
+while not sensor:
+    try:
+        i2c = busio.I2C(board.SCL, board.SDA)
+        sensor = HTU21D(i2c)
+    except ValueError:
+        logger.info("Please enable I2C bus")
+        os.system("sudo raspi-config")
 
 
 # Get config
@@ -36,13 +42,12 @@ def read_config():
     # get config path
     base_config = configparser.ConfigParser()
     base_config.read(BASE_CONFIG)
+    base_keys = list(base_config['BASE'].keys())
+    # set config if not exists
+    if not ('config_path' in base_keys and 'cred_path' in base_keys):
+        os.system('set-config')
     config_path = base_config['BASE']['config_path']
     cred_path = base_config['BASE']['cred_path']
-    # set config if not exists
-    if not (os.path.exists(config_path) and os.path.exists(cred_path)):
-        os.system('set-config')
-        config_path = base_config['BASE']['config_path']
-        cred_path = base_config['BASE']['cred_path']
     # read config
     config = configparser.ConfigParser()
     config.read(config_path)
