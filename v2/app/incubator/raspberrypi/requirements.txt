@@ -3,3 +3,4 @@ adafruit-circuitpython-htu21d
 picamera
 adafruit-blinka
 RPI.GPIO
+pymysql

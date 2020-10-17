@@ -46,6 +46,7 @@ def read_config():
     # set config if not exists
     if not ('config_path' in base_keys and 'cred_path' in base_keys):
         os.system('set-config')
+    base_config.read(BASE_CONFIG)
     config_path = base_config['BASE']['config_path']
     cred_path = base_config['BASE']['cred_path']
     # read config
