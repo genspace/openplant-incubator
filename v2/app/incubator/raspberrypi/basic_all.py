@@ -26,19 +26,18 @@ from incubator.raspberrypi.scripts import BASE_CONFIG
 from incubator.util import get_connection_string
 
 
-# Ensure pip installs available
-os.system("install-requirements")
-
-
 # Create library object using our Bus I2C port
-sensor = None
-while not sensor:
-    try:
-        i2c = busio.I2C(board.SCL, board.SDA)
-        sensor = HTU21D(i2c)
-    except ValueError:
-        logger.info("Please enable I2C bus")
-        os.system("sudo raspi-config")
+try:
+    i2c = busio.I2C(board.SCL, board.SDA)
+    sensor = HTU21D(i2c)
+except ValueError:
+    logger.info("Please enable I2C Bus and Camera...")
+    logger.info("Launching config in 5 seconds...")
+    time.sleep(5)
+    os.system("sudo raspi-config")
+i2c = busio.I2C(board.SCL, board.SDA)
+sensor = HTU21D(i2c)
+
 
 
 # Get config

@@ -1,13 +1,30 @@
+import os
 import setuptools
+from setuptools.command.install import install
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    def run(self):
+        install.run(self)
+        if os.path.exists('~/.profile'):
+            os.system('source ~/.profile')
+        os.system('install-requirements')
+        os.system('set-config')
+
 
 setuptools.setup(
     name="openplant",
     version="0.0.42",
     author="Genspace",
     description="Open Plant Incubator",
+    cmdclass={
+        'install': PostInstallCommand
+    },
+    long_description=long_description,
     url="https://github.com/genspace/openplant-incubator",
     packages=setuptools.find_packages(where="./v2/app"),
     package_dir= {
