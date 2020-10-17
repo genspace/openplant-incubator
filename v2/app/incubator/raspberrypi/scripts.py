@@ -16,21 +16,18 @@ def say_hello():
 
 
 def install_requirements():
-    os.system(f"pip3 install -r {REQUIREMENTS}")
+    os.system(f"pip3 install --update -r {REQUIREMENTS}")
     return None
 
 
 def set_config():
     # get base config and specify config path
     base_config = configparser.ConfigParser()
-    logger.info(f"Reading base config from: {BASE_CONFIG}")
     base_config.read(BASE_CONFIG)
-    config_path = base_config['BASE'].get("config_path")
-    if not config_path:
-        config_path = input(f"Set config path [{DEFAULT_CONFIG_PATH}]:") or DEFAULT_CONFIG_PATH
-        base_config['BASE']['config_path'] = config_path
-        with open(BASE_CONFIG, 'w') as fin:
-            base_config.write(fin)
+    config_path = input(f"Set config path [{DEFAULT_CONFIG_PATH}]:") or DEFAULT_CONFIG_PATH
+    base_config['BASE']['config_path'] = config_path
+    with open(BASE_CONFIG, 'w') as fin:
+        base_config.write(fin)
     # read config file
     config = configparser.ConfigParser()
     config.read(config_path)
