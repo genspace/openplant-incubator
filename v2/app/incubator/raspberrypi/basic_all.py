@@ -96,19 +96,18 @@ def initialize_system():
 
 def get_incubator_id():
     # Check to see if incubator name exists in database, if not, create
-    incubator_id = (
-        session.query(schema.Incubator.id)
-        .filter(schema.Incubator.node == uuid.getnode())
-        .first()
-    )
-    if not incubator_id:
+    def get_query_incubator():
+        return (
+            session.query(schema.Incubator.id)
+            .filter(schema.Incubator.node == uuid.getnode())
+            .first()
+        )
+    if not get_incubator_id():
         logger.info("Incubator ID not yet created... assigning new")
-        incubator_id = uuid.uuid4()
-        incubator = schema.Incubator(id=incubator_id, name=INCUBATOR_NAME, node=uuid.getnode())
+        incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
-        logger.info("Assigned id: %s" % incubator_id)
-    return incubator_id
+    return get_incubator_id()
 
 
 def take_picture():
@@ -150,7 +149,6 @@ def adjust_lights():
 
 def write_to_database(incubator_id):
     record = schema.Sensor(
-        id = uuid.uuid4(),
         incubator_id = incubator_id,
         time = datetime.datetime.now(),
         temperature = sensor.temperature,
