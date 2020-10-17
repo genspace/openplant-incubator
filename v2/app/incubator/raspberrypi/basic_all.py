@@ -54,7 +54,7 @@ def read_config():
 config_params = read_config()
 INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
-SLEEP_INTERVAL_SEC = int(config_params['sleep_interval_set'])
+SLEEP_INTERVAL_SEC = int(config_params['sleep_interval_sec'])
 LIGHT_TIME = tuple(
     map(int, config_params['light_time'].split(","))
 )
