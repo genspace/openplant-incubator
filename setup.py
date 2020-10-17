@@ -9,27 +9,27 @@ setuptools.setup(
     author="Genspace",
     description="Open Plant Incubator",
     url="https://github.com/genspace/openplant-incubator",
-    packages=setuptools.find_packages(
-        include=[
-            'app', 'app.*'
-        ]
-    ),
+    packages=setuptools.find_packages(where="./v2/app"),
     package_dir= {
-        '': 'v2'
+        '': 'v2/app'
     },
     entry_points={
         'console_scripts': [
-            'test-incubator=app.incubator.raspberrypi.test:main'
+            'say-hello=incubator.raspberrypi.scripts:say_hello',
+            'install-requirements=incubator.raspberrypi.scripts:install_requirements',
+            'set-config=incubator.raspberrypi.scripts:set_config',
+            'incubate-me=incubator.raspberrypi.basic_all:main'
         ]
     },
     install_requires=[
-        'sqlalchemy',
-        'adafruit-circuitpython-htu21d',
-        'picamera',
         'loguru',
-        'adafruit-blinka',
-        'RPI.GPIO'
     ],
+    package_data={
+        "incubator": [
+            "raspberrypi/*.txt",
+            "raspberrypi/*.ini",
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

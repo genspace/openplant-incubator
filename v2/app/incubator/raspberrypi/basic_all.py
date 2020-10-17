@@ -6,7 +6,8 @@ regular picture uploads.
 """
 
 import datetime
-import logging
+import configparser
+from loguru import logger
 import os
 import time
 import uuid
@@ -18,22 +19,43 @@ import picamera
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 
-from app.models import schema
-from app.util import get_connection_string
-from config import INCUBATOR_NAME, LIGHT_TIME, PICTURES_FOLDER, SLEEP_INTERVAL_SEC
+from models import schema
+from incubator.raspberrypi.scripts import BASE_CONFIG
+from incubator.util import get_connection_string
 
-
-# Set logger
-logging.basicConfig()
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 # Create library object using our Bus I2C port
 i2c = busio.I2C(board.SCL, board.SDA)
 sensor = HTU21D(i2c)
 
+
+# Get config
+def read_config():
+    # get config path
+    base_config = configparser.ConfigParser()
+    base_config.read(BASE_CONFIG)
+    config_path = base_config['BASE']['config_path']
+    # set config if not exists
+    if not os.path.exists(config_path):
+        os.system('set-config')
+    # read config
+    config = configparser.ConfigParser()
+    config.read(config_path)
+    return dict(config['INCUBATOR'])
+
+
+# Unpack config values
+config_params = read_config()
+INCUBATOR_NAME = config_params['incubator_name']
+PICTURES_FOLDER = config_params['pictures_folder']
+SLEEP_INTERVAL_SEC = eval(config_params['sleep_interval_set'])
+LIGHT_TIME = eval(config_params['light_time'])
+os.environ['AWS_ACCESS_KEY_ID'] = config_params['aws_access_key_id']
+os.environ['AWS_SECRET_ACCESS_KEY'] = config_params['aws_secret_access_key']
+
+
 # Set paths for folder upload
-S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}"
+S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
 # Create database session
 engine = create_engine(get_connection_string())
@@ -45,9 +67,13 @@ def validate_incubator_name():
     bad_char_list = [" ", "/", "\\"]
     if len(set(bad_char_list) & set(INCUBATOR_NAME)) > 0:
         raise ValueError(f"Incubator name cannot contain: {bad_char_list}")
+    if not INCUBATOR_NAME:
+        raise ValueError("Missing incubator name!")
 
 
 def initialize_system():
+    # Ensure pip installs available
+    os.system("install-requirements")
     # Ensure picture folder exists
     os.system("mkdir -p " + PICTURES_FOLDER)
     # Lights as output and off
@@ -59,13 +85,13 @@ def get_incubator_id():
     # Check to see if incubator name exists in database, if not, create
     incubator_id = (
         session.query(schema.Incubator.id)
-        .filter(schema.Incubator.name == INCUBATOR_NAME)
+        .filter(schema.Incubator.node == uuid.getnode())
         .first()
     )
     if not incubator:
         logger.info("Incubator ID not yet created... assigning new")
         incubator_id = uuid.uuid4()
-        incubator = schema.Incubator(id=incubator_id, name=INCUBATOR_NAME)
+        incubator = schema.Incubator(id=incubator_id, name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
         logger.info("Assigned id: %s" % incubator_id)
@@ -131,6 +157,7 @@ def main():
         take_picture()
         write_to_database(incubator_id)
         time.sleep(SLEEP_INTERVAL_SEC)
+
 
 if __name__ == "__main__":
     main()

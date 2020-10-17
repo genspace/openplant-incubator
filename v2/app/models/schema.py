@@ -83,6 +83,7 @@ class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True, autoincrement=True,)
     name = Column(String, unique=True)
+    node = Column(Integer, unique=True)
 
 
 class Plasmid(Base):
