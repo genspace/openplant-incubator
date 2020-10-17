@@ -18,7 +18,7 @@ def say_hello():
 
 
 def install_requirements():
-    os.system(f"pip3 install --update -r {REQUIREMENTS}")
+    os.system(f"pip3 install -r {REQUIREMENTS}")
     return None
 
 
