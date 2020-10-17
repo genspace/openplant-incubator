@@ -32,10 +32,8 @@ def set_config():
     config = configparser.ConfigParser()
     config.read(config_path)
     # update defaults
-    logger.info(DEFAULT_CONFIG_PARAMS)
     if 'INCUBATOR' in config:
         DEFAULT_CONFIG_PARAMS.update(dict(config['INCUBATOR']))
-        logger.info(DEFAULT_CONFIG_PARAMS)
     else:
         config['INCUBATOR'] = {}
     # check with user for input
