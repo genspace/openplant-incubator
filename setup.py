@@ -23,6 +23,7 @@ setuptools.setup(
     },
     install_requires=[
         'loguru',
+        'cowsay',
         'python-dotenv'
     ],
     package_data={

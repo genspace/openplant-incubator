@@ -15,6 +15,7 @@ import uuid
 from adafruit_htu21d import HTU21D
 import board
 import busio
+import cowsay
 from dotenv import load_dotenv
 import picamera
 from sqlalchemy.orm import Session
@@ -38,7 +39,7 @@ def read_config():
     config_path = base_config['BASE']['config_path']
     cred_path = base_config['BASE']['cred_path']
     # set config if not exists
-    if not os.path.exists(config_path) and os.path.exists(cred_path):
+    if not (os.path.exists(config_path) and os.path.exists(cred_path)):
         os.system('set-config')
         config_path = base_config['BASE']['config_path']
         cred_path = base_config['BASE']['cred_path']
@@ -152,6 +153,7 @@ def write_to_database(incubator_id):
 
 
 def main():
+    cowsay.tux("Let's incubate!")
     validate_incubator_name()
     initialize_system()
     incubator_id = get_incubator_id()
