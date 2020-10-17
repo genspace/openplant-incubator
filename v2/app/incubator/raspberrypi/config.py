@@ -7,7 +7,4 @@ DEFAULT_CONFIG_PARAMS = {
     "sleep_interval_sec": 300,
     # Time range for lights on / off
     "light_time": (800, 2399),
-    # S3 Credentials
-    "aws_access_key_id": None,
-    "aws_secret_access_key": None
 }
