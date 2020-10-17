@@ -88,7 +88,7 @@ def validate_incubator_name():
 
 def initialize_system():
     # Ensure picture folder exists
-    os.system("mkdir -p " + PICTURES_FOLDER)
+    os.system("sudo mkdir -p " + PICTURES_FOLDER)
     # Lights as output and off
     os.system("gpio -g mode 12 out")
     os.system("gpio -g write 12 0")
@@ -102,12 +102,14 @@ def get_incubator_id():
             .filter(schema.Incubator.node == uuid.getnode())
             .first()
         )
-    if not get_incubator_id():
+    incubator_id = get_incubator_id()
+    if not incubator_id:
         logger.info("Incubator ID not yet created... assigning new")
         incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
-    return get_incubator_id()
+        incubator_id = get_incubator_id()
+    return incubator_id[0]
 
 
 def take_picture():
