@@ -54,8 +54,10 @@ def read_config():
 config_params = read_config()
 INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
-SLEEP_INTERVAL_SEC = eval(config_params['sleep_interval_set'])
-LIGHT_TIME = eval(config_params['light_time'])
+SLEEP_INTERVAL_SEC = int(config_params['sleep_interval_set'])
+LIGHT_TIME = tuple(
+    map(int, config_params['light_time'].split(","))
+)
 
 # Set paths for folder upload
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"

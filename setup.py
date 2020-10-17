@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="openplant",
-    version="0.0.2",
+    version="0.0.3",
     author="Genspace",
     description="Open Plant Incubator",
     url="https://github.com/genspace/openplant-incubator",

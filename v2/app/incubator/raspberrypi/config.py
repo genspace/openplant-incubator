@@ -6,5 +6,5 @@ DEFAULT_CONFIG_PARAMS = {
     # How often to take pictures / log to database
     "sleep_interval_sec": 300,
     # Time range for lights on / off
-    "light_time": (800, 2399),
+    "light_time": "800,2399",
 }
