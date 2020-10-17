@@ -32,12 +32,16 @@ try:
     sensor = HTU21D(i2c)
 except ValueError:
     logger.info("Please enable I2C Bus and Camera...")
-    logger.info("Launching config in 5 seconds...")
-    time.sleep(5)
+    logger.info("Launching config in 3 seconds...")
+    time.sleep(3)
     os.system("sudo raspi-config")
-i2c = busio.I2C(board.SCL, board.SDA)
-sensor = HTU21D(i2c)
 
+try:
+    i2c = busio.I2C(board.SCL, board.SDA)
+    sensor = HTU21D(i2c)
+except ValueError as e:
+    logger.error("I2C not enabled... shutting down script")
+    raise(e)
 
 
 # Get config
