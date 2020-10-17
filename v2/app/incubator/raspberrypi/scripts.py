@@ -32,9 +32,10 @@ def set_config():
     base_config['BASE']['cred_path'] = cred_path
     # use gpg to unpack secrets
     if not os.path.exists(cred_path):
-        os.system(f'cp {GPG_SECRET} {DEFAULT_CRED_PATH}.gpg')
-        os.system(f'gpg {DEFAULT_CRED_PATH}.gpg')
-        os.system(f'rm {DEFAULT_CRED_PATH}.gpg')
+        logger.info(f"Unpacking secrets to: {cred_path}")
+        os.system(f'cp {GPG_SECRET} {cred_path}.gpg')
+        os.system(f'gpg {cred_path}.gpg')
+        os.system(f'rm {cred_path}.gpg')
     # write config
     with open(BASE_CONFIG, 'w') as fin:
         base_config.write(fin)
