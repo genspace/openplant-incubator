@@ -36,12 +36,16 @@ def read_config():
     base_config = configparser.ConfigParser()
     base_config.read(BASE_CONFIG)
     config_path = base_config['BASE']['config_path']
+    cred_path = base_config['BASE']['cred_path']
     # set config if not exists
-    if not os.path.exists(config_path):
+    if not os.path.exists(config_path) and os.path.exists(cred_path):
         os.system('set-config')
+        config_path = base_config['BASE']['config_path']
+        cred_path = base_config['BASE']['cred_path']
     # read config
     config = configparser.ConfigParser()
     config.read(config_path)
+    load_dotenv(cred_path)
     return dict(config['INCUBATOR'])
 
 
@@ -51,14 +55,6 @@ INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
 SLEEP_INTERVAL_SEC = eval(config_params['sleep_interval_set'])
 LIGHT_TIME = eval(config_params['light_time'])
-
-
-# Decrypt gpg if not exists, load dotenv
-dotenv_path = os.path.join(SCRIPT_DIR, 'db.env')
-if not os.path.exists(dotenv_path):
-    os.system(f'gpg {dotenv_path}')
-load_dotenv(dotenv_path)
-
 
 # Set paths for folder upload
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
