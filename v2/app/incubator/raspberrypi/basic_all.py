@@ -129,8 +129,6 @@ def take_picture():
         took_pic = True
     except picamera.exc.PiCameraError as err:
         logger.error("Error taking picture: " + str(err))
-    except Exception:
-        logger.error("Error taking picture.")
     if took_pic:
         os.system(f"aws s3 cp {src_path} {dst_path}")
         logger.info(f"Uploaded picture to: {dst_path}")

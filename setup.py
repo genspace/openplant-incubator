@@ -18,7 +18,7 @@ class PostInstallCommand(install):
 
 setuptools.setup(
     name="openplant",
-    version="0.0.42",
+    version="0.0.43",
     author="Genspace",
     description="Open Plant Incubator",
     cmdclass={
