@@ -1,24 +1,29 @@
 import os
+import time
 import setuptools
-from setuptools.command.install import install
+import subprocess
+import distutils.cmd
+import distutils.log
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-class PostInstallCommand(install):
+class PostInstallCommand(distutils.cmd.Command):
     """Post-installation for installation mode."""
     def run(self):
-        install.run(self)
+        self.announce('Sourcing local profile', level=distutils.log.INFO)
         if os.path.exists('~/.profile'):
-            os.system('source ~/.profile')
-        os.system('install-requirements')
-        os.system('set-config')
+            subprocess.check_call(['source', '~/.profile'])
+        self.announce('Please set config', level=distutils.log.INFO)
+        time.sleep(5)
+        subprocess.check_call(['set-config'])
 
 
 setuptools.setup(
     name="openplant",
-    version="0.0.43",
+    version="0.0.44",
     author="Genspace",
     description="Open Plant Incubator",
     cmdclass={
@@ -41,7 +46,13 @@ setuptools.setup(
     install_requires=[
         'loguru',
         'cowsay',
-        'python-dotenv'
+        'python-dotenv',
+        'sqlalchemy',
+        'adafruit-circuitpython-htu21d',
+        'picamera',
+        'adafruit-blinka',
+        'RPI.GPIO',
+        'pymysql'
     ],
     package_data={
         "incubator": [
