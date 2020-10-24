@@ -22,6 +22,13 @@ def install_requirements():
     return None
 
 
+def test_camera():
+    import picamera
+    with picamera.PiCamera() as camera:
+        camera.resolution = (1280, 720)
+        camera.capture('test.png')
+
+
 def set_config():
     # get base config and specify config / cred path
     base_config = configparser.ConfigParser()

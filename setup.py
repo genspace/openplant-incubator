@@ -37,6 +37,7 @@ setuptools.setup(
             'say-hello=incubator.raspberrypi.scripts:say_hello',
             'install-requirements=incubator.raspberrypi.scripts:install_requirements',
             'set-config=incubator.raspberrypi.scripts:set_config',
+            'test-camera=incubator.raspberrypi.scripts:test_camera',
             'incubate-me=incubator.raspberrypi.basic_all:main'
         ]
     },
