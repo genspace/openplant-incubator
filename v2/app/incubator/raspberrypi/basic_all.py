@@ -132,7 +132,7 @@ def take_picture():
     if took_pic:
         os.system(f"aws s3 cp {src_path} {dst_path}")
         logger.info(f"Uploaded picture to: {dst_path}")
-        os.system("rm {src_path}")
+        os.system(f"rm {src_path}")
 
 
 def is_lights_on():
