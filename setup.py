@@ -26,9 +26,9 @@ setuptools.setup(
     version="0.0.44",
     author="Genspace",
     description="Open Plant Incubator",
-    cmdclass={
-        'install': PostInstallCommand
-    },
+    # cmdclass={
+    #     'install': PostInstallCommand
+    # },
     long_description=long_description,
     url="https://github.com/genspace/openplant-incubator",
     packages=setuptools.find_packages(where="./v2/app"),
