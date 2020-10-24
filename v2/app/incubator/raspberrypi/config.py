@@ -1,6 +1,6 @@
 DEFAULT_CONFIG_PARAMS = {
     # Edit these for the particular incubator
-    "pictures_folder": "/root/pictures",
+    "pictures_folder": "/home/pi/pictures",
     # This is the folder inside our S3 bucket.
     "incubator_name": None,
     # How often to take pictures / log to database

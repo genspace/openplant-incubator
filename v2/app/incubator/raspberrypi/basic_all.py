@@ -91,7 +91,7 @@ def validate_incubator_name():
 
 def initialize_system():
     # Ensure picture folder exists
-    os.system("sudo mkdir -p " + PICTURES_FOLDER)
+    os.system("mkdir -p " + PICTURES_FOLDER)
     # Lights as output and off
     os.system("gpio -g mode 12 out")
     os.system("gpio -g write 12 0")
