@@ -44,3 +44,12 @@ data_2/
 *.vscode
 .python-version
 v2/db.env
+<<<<<<< HEAD
+=======
+.env/*
+
+#Build Files
+############
+dist/*
+*.egg-info
+>>>>>>> 734680c73235e67b40072fbdf403f1a9a47e9ca7

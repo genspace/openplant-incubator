@@ -82,7 +82,12 @@ class Sensor(Base):
 class Incubator(Base):
     __tablename__ = 'incubator'
     id = Column(Integer, primary_key=True, autoincrement=True,)
+<<<<<<< HEAD
     number = Column(Integer, unique=True)
+=======
+    name = Column(String, unique=True)
+    node = Column(Integer, unique=True)
+>>>>>>> 734680c73235e67b40072fbdf403f1a9a47e9ca7
 
 
 class Plasmid(Base):
