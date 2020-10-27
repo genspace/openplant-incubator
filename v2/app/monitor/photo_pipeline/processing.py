@@ -7,7 +7,17 @@ import pandas as pd
 from math import atan2, pi, sqrt
 from matplotlib import pyplot as plt
 
-def apply_hough_transform(img, min_rad=500, max_rad=None):
+def process(img_raw):
+
+    img, circle = pcs.prep_image(img_raw)
+    img_circle = pcs.draw_circle(img, circle) 
+    output_path = os.path.dirname(img_path) + "/cropped_" + os.path.basename(img_path)
+    
+    mpimg.imsave(output_path, img_circle/255)
+    
+    return(1)
+
+def apply_hough_transform(img, min_rad=500, max_rad = None):
     """
     Get the top resulting cricle from the hough circle transform
     """
@@ -24,6 +34,7 @@ def apply_hough_transform(img, min_rad=500, max_rad=None):
                          minRadius=500, maxRadius=img.shape[0]//2)
     # Return the top circle
     top_circle = circles[0][0]
+    
     return top_circle
 
 
@@ -43,6 +54,7 @@ def circle_crop(img, circle, buffer = 0.1):
     # adjust circle coordinates
     new_xy = int(0 + r * buffer) + 0.5
     circle = np.array([new_xy, new_xy, r])
+    
     return img_out, circle
 
 def circle_strip(img, circle, buffer=.1,
@@ -71,6 +83,7 @@ def circle_strip(img, circle, buffer=.1,
         img_out.append(img_x)
     img_out = np.array(img_out)
     img_out = np.uint16(np.around(img_out))
+    
     return img_out
 
 
@@ -96,12 +109,14 @@ def draw_circle(img, circle, center=True):
         # Draw inner circle
         cv2.circle(img_out, (circle[0], circle[1]),
                    4, innner_color, img.shape[0] // 50)
+                   
     return img_out
 
 def prep_image(img_raw):    
     circle = apply_hough_transform(img_raw)
     img, circle = circle_crop(img_raw, circle)
     img = circle_strip(img, circle)
+    
     return img, circle
 
 # Get objects to help with band counts
@@ -146,8 +161,8 @@ def band_wrap(img, circle, scale=(0.9, 0.95)):
         img_out.append(l)
     img_out = np.array(img_out)
     img_out = np.uint16(np.around(img_out))
+    
     return img_out, cser
-
 
 def count_bands(cser, tresh=100, min_rad=10):
     mr = round(min_rad / 100, 2)
@@ -161,4 +176,12 @@ def count_bands(cser, tresh=100, min_rad=10):
         if dif >= mr:
             ct += 1
         it = i
+        
     return ct
+    
+def identification():
+    
+    band_pic, cser = band_wrap(img, circle)
+    band_ct = count_bands(cser)
+    
+    return(1)

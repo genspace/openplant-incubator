@@ -1,7 +1,3 @@
-# Plant Color Density Histogram: https://bit.ly/2ENtVXr
-# Object Size:
-# https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv/
-
 import os
 from matplotlib import pyplot as plt
 from scipy.spatial import distance as dist
@@ -11,6 +7,25 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+
+def calculate(img_path):
+    
+    image = cv2.imread(img_path) 
+    #is_ = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # plant color 
+    colors_small = ccl.color_hist(image)
+    max_green = max(colors_small)
+    area_small = ccl.get_area_green(colors_small)
+
+    # plant size
+    # width in inches for 100mm plate: 3.93701
+    # width in inches for 60mm plate: 2.3622
+    bounding_box = ccl.size_detect(image, width = 2.3622, fname = "out2.png")
+    
+    results = {"area": area, "size": bounding_box}
+    
+    return(results)
 
 
 def midpoint(ptA, ptB):
