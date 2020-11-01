@@ -100,12 +100,12 @@ def draw_circle(img, circle, center=True):
     else:
         return img
     # Draw outer circle
-    cv2.circle(img_out, (circle[0], circle[1]),
-               circle[2], outer_color, img.shape[0] // 100)
-    if center:
-        # Draw inner circle
-        cv2.circle(img_out, (circle[0], circle[1]),
-                   4, innner_color, img.shape[0] // 50)
+    # cv2.circle(img_out, (circle[0], circle[1]),
+    #            circle[2], outer_color, img.shape[0] // 100)
+    # if center:
+    #     # Draw inner circle
+    #     cv2.circle(img_out, (circle[0], circle[1]),
+    #                4, innner_color, img.shape[0] // 50)
                    
     return img_out
 
