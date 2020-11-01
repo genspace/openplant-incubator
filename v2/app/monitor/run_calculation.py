@@ -13,12 +13,9 @@ from matplotlib import pyplot as plt
 def run_calculation(img_path):
     
     image = cv2.imread(img_path) 
-    #is_ = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     results = ccl.calculation(image)
 
-    print(results)
-    
-    return(1)
+    return(img_path, results)
 
 if __name__=='__main__':
     
