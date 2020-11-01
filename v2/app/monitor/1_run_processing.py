@@ -8,7 +8,8 @@ import os.path
 def run_processing(img_path):
 
     img_raw = cv2.imread(img_path, cv2.IMREAD_COLOR)
-    img_circle, output_path = pcs.process(img_raw)
+    img_circle= pcs.process(img_raw)
+    output_path = os.path.dirname(img_path) + "/cropped_" + os.path.basename(img_path)
     
     mpimg.imsave(output_path, img_circle/255)
     

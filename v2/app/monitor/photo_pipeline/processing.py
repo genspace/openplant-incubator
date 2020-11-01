@@ -9,13 +9,10 @@ from matplotlib import pyplot as plt
 
 def process(img_raw):
 
-    img, circle = pcs.prep_image(img_raw)
-    img_circle = pcs.draw_circle(img, circle) 
-    output_path = os.path.dirname(img_path) + "/cropped_" + os.path.basename(img_path)
+    img, circle = prep_image(img_raw)
+    img_circle = draw_circle(img, circle) 
     
-    mpimg.imsave(output_path, img_circle/255)
-    
-    return(1)
+    return(img_circle)
 
 def apply_hough_transform(img, min_rad=500, max_rad = None):
     """
@@ -118,70 +115,3 @@ def prep_image(img_raw):
     img = circle_strip(img, circle)
     
     return img, circle
-
-# Get objects to help with band counts
-
-def band_wrap(img, circle, scale=(0.9, 0.95)):
-    """
-    Take input image and tuple that defines (x, y, r) of circle.
-    Scale set to portion of radius analyzed for band sequence.
-    Reutrns image of average pixel colors as well as series
-    set to total distance away from black.
-    """
-    x, y, r = circle
-    rad_dict = dict()
-    for iy, _ in enumerate(img):
-        for ix, _ in enumerate(img[iy]):
-            if (ix - x) ** 2 + (iy - y) ** 2 > (r * scale[1]) ** 2:
-                continue
-            if (ix - x) ** 2 + (iy - y) ** 2 < (r * scale[0]) ** 2:
-                continue
-            # add val to dict
-            pix = img[iy][ix]
-            rad = round(atan2(y - iy, ix - x), 2)
-            if rad not in rad_dict:
-                rad_dict[rad] = []
-            rad_dict[rad].append(pix)
-    # set dictionary averages
-    rad_dict = \
-        {k:np.mean(v, axis=0) for k,v in rad_dict.items()}
-    # create ordered array 1/pi as wide as long
-    keys = sorted(list(rad_dict.keys()))
-    # create series
-    sqr = lambda e: e ** 2
-    cro = lambda e: sqrt(sum(map(sqr, e[:3])))
-    cser =\
-        pd.Series([cro(rad_dict[k]) for k in keys], index=keys)
-    # build img_out
-    width = int(len(keys) / (pi * 2))
-    img_out = []
-    for k in keys:
-        l = list(rad_dict[k])
-        l = [l for i in range(width)]
-        img_out.append(l)
-    img_out = np.array(img_out)
-    img_out = np.uint16(np.around(img_out))
-    
-    return img_out, cser
-
-def count_bands(cser, tresh=100, min_rad=10):
-    mr = round(min_rad / 100, 2)
-    ts = cser[((cser > 100).astype(int).diff() == 1)]
-    ct = 0
-    if ts.shape[0] == 0:
-        return ct
-    it = ts.index[0] - mr
-    for i in ts.index:
-        dif = round(i - it, 2)
-        if dif >= mr:
-            ct += 1
-        it = i
-        
-    return ct
-    
-def identification():
-    
-    band_pic, cser = band_wrap(img, circle)
-    band_ct = count_bands(cser)
-    
-    return(1)

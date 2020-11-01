@@ -8,22 +8,17 @@ import argparse
 import imutils
 import cv2
 
-def calculate(img_path):
-    
-    image = cv2.imread(img_path) 
-    #is_ = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+def calculation(image):
 
     # plant color 
-    colors_small = ccl.color_hist(image)
-    max_green = max(colors_small)
-    area_small = ccl.get_area_green(colors_small)
+    colors_small = color_hist(image)
+    area_small = get_area_green(colors_small)
 
     # plant size
-    # width in inches for 100mm plate: 3.93701
-    # width in inches for 60mm plate: 2.3622
-    bounding_box = ccl.size_detect(image, width = 2.3622, fname = "out2.png")
+    # width in inches for 60mm/100mm plate: 2.3622/3.93701
+    bounding_box = size_detect(image, width = 2.3622, fname = "out.png")
     
-    results = {"area": area, "size": bounding_box}
+    results = {"healthy_area": area_small, "size": bounding_box}
     
     return(results)
 
@@ -162,16 +157,18 @@ def size_detect(image, width=3.93701, fname="out2.png"):
         dimA = dA / pixelsPerMetric
         dimB = dB / pixelsPerMetric
         area = dimA * dimB
+        
+        print(dimA, dimB)
 
         # draw the object sizes on the image
-        cv2.putText(orig, "{:.1f}in".format(dimA),
-                    (int(tltrX - 15), int(tltrY - 10)), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.65, (255, 255, 255), 2)
-        cv2.putText(orig, "{:.1f}in".format(dimB),
-                    (int(trbrX + 10), int(trbrY)), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.65, (255, 255, 255), 2)
-        # show the output image
-        #cv2.imshow("Image", orig)
-        #cv2.waitKey(0)
+        # cv2.putText(orig, "{:.1f}in".format(dimA),
+        #             (int(tltrX - 15), int(tltrY - 10)), cv2.FONT_HERSHEY_SIMPLEX,
+        #             0.65, (255, 255, 255), 2)
+        # cv2.putText(orig, "{:.1f}in".format(dimB),
+        #             (int(trbrX + 10), int(trbrY)), cv2.FONT_HERSHEY_SIMPLEX,
+        #             0.65, (255, 255, 255), 2)
+        # # show the output image
+        # cv2.imshow("Image", orig)
+        # cv2.waitKey(0)
 
         return(area)
