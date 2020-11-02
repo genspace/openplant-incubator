@@ -13,9 +13,10 @@ from matplotlib import pyplot as plt
 def run_calculation(img_path):
     
     image = cv2.imread(img_path) 
-    results = ccl.calculation(image)
+    results = ccl.calculation(image, img_path)
+    results["img_path"] = img_path
 
-    return(img_path, results)
+    return(results)
 
 if __name__=='__main__':
     

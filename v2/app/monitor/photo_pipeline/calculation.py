@@ -12,6 +12,8 @@ from skimage.morphology import binary_opening
 from scipy import ndimage as ndi
 from PIL import Image, ImageOps
 from toolz import pipe
+from skimage.io import imsave
+import os.path
 
 def get_area(img, img_diameter):
     
@@ -27,7 +29,7 @@ def get_area(img, img_diameter):
     
     return(result)
 
-def calculation(image):
+def calculation(image, img_path):
     
     PIL_image = Image.fromarray(np.uint8(image)).convert('RGB')
     invert_im = ImageOps.invert(PIL_image) # invert image (so that white is 0)
@@ -38,10 +40,14 @@ def calculation(image):
     s = pcv.rgb2gray_hsv(rgb_img = image, channel = 's')
     s_thresh = pcv.threshold.binary(gray_img = s, threshold = 150, max_value = 255, object_type = 'light')
     area = get_area(s_thresh, s_thresh.shape[0])
+    output_path_area = os.path.dirname(img_path) + "/" + os.path.basename(img_path)  + "_area.jpg"
+    imsave(output_path_area, s_thresh)
     
     img2 = np.copy(image)
     img2[s_thresh == 0] = 0
     health = get_area(img2[:,:,1], s_thresh.shape[0])
+    output_path_health = os.path.dirname(img_path) + "/" + os.path.basename(img_path) + "_health.jpg"
+    imsave(output_path_health, img2[:,:,1])
     
     results = {"healthy_size": health, "size": area}
     
