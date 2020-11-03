@@ -5,9 +5,3 @@ The code in this repository is open sourced and provides tools to develop a plan
 ![Software Schematic](./software_schematic.png)
 
 https://trello.com/b/W0jccEJs/welcome-to-the-project
-
-References for image processing pipeline:
-
-Plant Color Density Histogram: https://www.pyimagesearch.com/2014/01/22/clever-girl-a-guide-to-utilizing-color-histograms-for-computer-vision-and-image-search-engines/
-
-Object Size: https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv/
