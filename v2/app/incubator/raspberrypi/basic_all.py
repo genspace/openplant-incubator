@@ -27,6 +27,7 @@ from incubator.util import get_connection_string
 
 
 # Create library object using our Bus I2C port
+sensor = None
 try:
     i2c = busio.I2C(board.SCL, board.SDA)
     sensor = HTU21D(i2c)
@@ -40,8 +41,8 @@ try:
     i2c = busio.I2C(board.SCL, board.SDA)
     sensor = HTU21D(i2c)
 except ValueError as e:
-    logger.error("I2C not enabled... shutting down script")
-    raise(e)
+    logger.error("I2C not enabled... will not log sensor values to database")
+    pass
 
 
 # Get config
@@ -171,7 +172,8 @@ def main():
     while True:
         adjust_lights()
         take_picture()
-        write_to_database(incubator_id)
+        if sensor:
+            write_to_database(incubator_id)
         time.sleep(SLEEP_INTERVAL_SEC)
 
 
