@@ -5,3 +5,5 @@ The code in this repository is open sourced and provides tools to develop a plan
 ![Software Schematic](./software_schematic.png)
 
 https://trello.com/b/W0jccEJs/welcome-to-the-project
+
+Please feel free to get in touch with the team.
