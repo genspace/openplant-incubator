@@ -6,5 +6,4 @@ The code in this repository is open sourced and provides tools to develop a plan
 
 https://trello.com/b/W0jccEJs/welcome-to-the-project
 
-This is just a test merge.
-
+Please feel free to get in touch with the team.
