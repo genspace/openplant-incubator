@@ -80,7 +80,7 @@ CAMERA_RESOLUTION = tuple(
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
 # Create database session
-engine = create_engine(get_connection_string(), pool_pre_ping=True)
+engine = create_engine(get_connection_string(), pool_pre_ping=True, pool_size=100, pool_recycle=280)
 session = Session(bind=engine)
 
 
