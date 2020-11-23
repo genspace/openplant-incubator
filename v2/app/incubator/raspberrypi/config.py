@@ -7,4 +7,6 @@ DEFAULT_CONFIG_PARAMS = {
     "sleep_interval_sec": 300,
     # Time range for lights on / off
     "light_time": "800,2399",
+    # Resolution for camera
+    "camera_resolution": "1280,720"
 }

@@ -70,14 +70,17 @@ INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
 SLEEP_INTERVAL_SEC = int(config_params['sleep_interval_sec'])
 LIGHT_TIME = tuple(
-    map(int, config_params['light_time'].split(","))
+    map(int, config_params.get('light_time', "800,2399").split(","))
+)
+CAMERA_RESOLUTION = tuple(
+    map(int, config_params.get('camera_resolution', "1280,720").split(","))
 )
 
 # Set paths for folder upload
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
 # Create database session
-engine = create_engine(get_connection_string())
+engine = create_engine(get_connection_string(), pool_pre_ping=True)
 session = Session(bind=engine)
 
 
@@ -125,7 +128,7 @@ def take_picture():
     took_pic = False
     try:
         with picamera.PiCamera() as camera:
-            camera.resolution = (1280, 720)
+            camera.resolution = CAMERA_RESOLUTION
             camera.capture(src_path)
         took_pic = True
     except picamera.exc.PiCameraError as err:
