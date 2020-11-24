@@ -119,9 +119,9 @@ def get_incubator_id():
         incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
-        incubator_id = query_id(session)
+        incubator_id = query_id(session)[0]
     session.close()
-    return incubator_id[0]
+    return incubator_id
 
 
 def take_picture():
@@ -170,8 +170,9 @@ def write_to_database(incubator_id):
     session = get_session()
     session.add(record)
     session.commit()
-    session.close()
     logger.info(record)
+    session.close()
+    return None
 
 
 def main():
