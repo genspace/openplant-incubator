@@ -82,12 +82,7 @@ S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
 # Create database session
 def get_session():
-    engine = create_engine(
-        get_connection_string(),
-        pool_pre_ping=True,
-        pool_size=100,
-        pool_recycle=280
-    )
+    engine = create_engine(get_connection_string())
     return Session(bind=engine)
 
 
