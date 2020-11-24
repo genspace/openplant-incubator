@@ -25,6 +25,9 @@ from models import schema
 from incubator.raspberrypi.scripts import BASE_CONFIG
 from incubator.util import get_connection_string
 
+from contextlib import contextmanager
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 # Create library object using our Bus I2C port
 sensor = None
@@ -80,10 +83,16 @@ CAMERA_RESOLUTION = tuple(
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
 
-# Create database session
-def get_session():
-    engine = create_engine(get_connection_string())
-    return Session(bind=engine)
+@contextmanager
+def get_db_session():
+    """ Creates a context with an open SQLAlchemy session.
+    """
+    engine = create_engine(get_connection_string(), convert_unicode=True)
+    connection = engine.connect()
+    db_session = Session(autocommit=False, autoflush=True, bind=engine)
+    yield db_session
+    db_session.close()
+    connection.close()
 
 
 def validate_incubator_name():
@@ -103,24 +112,29 @@ def initialize_system():
     os.system("gpio -g write 12 0")
 
 
-def get_incubator_id():
-    # Get session
-    session = get_session()
-    # Check to see if incubator name exists in database, if not, create
-    def query_id(session):
-        return (
+def check_incubator_id():
+    incubator_id = None
+    with get_db_session() as session:
+        result = (
             session.query(schema.Incubator.id)
             .filter(schema.Incubator.node == uuid.getnode())
             .first()
         )
-    incubator_id = query_id(session)
+        if result:
+            incubator_id = result[0]
+    return incubator_id
+
+
+def get_incubator_id():
+    # Check to see if incubator name exists in database, if not, create
+    incubator_id = check_incubator_id()
     if not incubator_id:
-        logger.info("Incubator ID not yet created... assigning new")
-        incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
-        session.add(incubator)
-        session.commit()
-        incubator_id = query_id(session)[0]
-    session.close()
+        with get_db_session() as session:
+            logger.info("Incubator ID not yet created... assigning new")
+            incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
+            session.add(incubator)
+            session.commit()
+            incubator_id = check_incubator_id()
     return incubator_id
 
 
@@ -167,11 +181,10 @@ def write_to_database(incubator_id):
         humidity = sensor.relative_humidity,
         light = int(is_lights_on()),
     )
-    session = get_session()
-    session.add(record)
-    session.commit()
-    logger.info(record)
-    session.close()
+    with get_db_session() as session:
+        session.add(record)
+        session.commit()
+        logger.info(record)
     return None
 
 
