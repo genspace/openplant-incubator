@@ -79,9 +79,16 @@ CAMERA_RESOLUTION = tuple(
 # Set paths for folder upload
 S3_PATH = f"s3://openplant/images/{INCUBATOR_NAME}-{uuid.getnode()}"
 
+
 # Create database session
-engine = create_engine(get_connection_string(), pool_pre_ping=True, pool_size=100, pool_recycle=280)
-session = Session(bind=engine)
+def get_session():
+    engine = create_engine(
+        get_connection_string(),
+        pool_pre_ping=True,
+        pool_size=100,
+        pool_recycle=280
+    )
+    return Session(bind=engine)
 
 
 def validate_incubator_name():
@@ -102,20 +109,23 @@ def initialize_system():
 
 
 def get_incubator_id():
+    # Get session
+    session = get_session()
     # Check to see if incubator name exists in database, if not, create
-    def query_id():
+    def query_id(session):
         return (
             session.query(schema.Incubator.id)
             .filter(schema.Incubator.node == uuid.getnode())
             .first()
         )
-    incubator_id = query_id()
+    incubator_id = query_id(session)
     if not incubator_id:
         logger.info("Incubator ID not yet created... assigning new")
         incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
         session.add(incubator)
         session.commit()
-        incubator_id = query_id()
+        incubator_id = query_id(session)
+    session.close()
     return incubator_id[0]
 
 
@@ -162,8 +172,10 @@ def write_to_database(incubator_id):
         humidity = sensor.relative_humidity,
         light = int(is_lights_on()),
     )
+    session = get_session()
     session.add(record)
     session.commit()
+    session.close()
     logger.info(record)
 
 
