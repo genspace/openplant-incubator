@@ -138,6 +138,12 @@ def get_incubator_id():
     return incubator_id
 
 
+def is_lights_on():
+    now = datetime.datetime.now()
+    time_int = int(now.strftime("%H%M"))
+    return (time_int >= LIGHT_TIME[0]) & (time_int <= LIGHT_TIME[1])
+
+
 def take_picture():
     # Attempt to take picture of plant
     t_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -156,12 +162,6 @@ def take_picture():
         os.system(f"aws s3 cp {src_path} {dst_path}")
         logger.info(f"Uploaded picture to: {dst_path}")
         os.system(f"rm {src_path}")
-
-
-def is_lights_on():
-    now = datetime.datetime.now()
-    time_int = int(now.strftime("%H%M"))
-    return (time_int >= LIGHT_TIME[0]) & (time_int <= LIGHT_TIME[1])
 
 
 def adjust_lights():
@@ -195,7 +195,8 @@ def main():
     incubator_id = get_incubator_id()
     while True:
         adjust_lights()
-        take_picture()
+        if is_lights_on():
+            take_picture()
         if sensor:
             write_to_database(incubator_id)
         time.sleep(SLEEP_INTERVAL_SEC)
