@@ -209,13 +209,15 @@ def main():
     camera_time = time.time()
     while True:
         adjust_lights()
-        if is_lights_on() and ((time.time() - camera_time) > CAMERA_FREQ_SECONDS):
+        camera_delta = (time.time() - camera_time)
+        sensor_delta = (time.time() - sensor_time)
+        if is_lights_on() and (camera_delta > CAMERA_FREQ_SECONDS):
             take_picture()
-            camera_time = time.time()
-        if sensor and ((time.time() - sensor_time) > SENSOR_FREQ_SECONDS):
+            camera_time += CAMERA_FREQ_SECONDS
+        if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
             is_success = write_to_database(incubator_id)
             if is_success:
-                sensor_time = time.time()
+                sensor_time += SENSOR_FREQ_SECONDS
         logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
 
