@@ -207,7 +207,6 @@ def main():
     incubator_id = get_incubator_id()
     sensor_time = time.time()
     camera_time = time.time()
-    write_fail_count = 0
     while True:
         adjust_lights()
         if is_lights_on() and ((time.time() - camera_time) > CAMERA_FREQ_SECONDS):
@@ -217,11 +216,6 @@ def main():
             is_success = write_to_database(incubator_id)
             if is_success:
                 sensor_time = time.time()
-                write_fail_count = 0
-            else:
-                write_fail_count += 1
-        if write_fail_count > 3:
-            raise(Exception("Failed to write to database 3 consecutive times!"))
         logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
 
