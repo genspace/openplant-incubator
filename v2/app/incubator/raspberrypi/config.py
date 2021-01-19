@@ -3,8 +3,10 @@ DEFAULT_CONFIG_PARAMS = {
     "pictures_folder": "/home/pi/pictures",
     # This is the folder inside our S3 bucket.
     "incubator_name": None,
-    # How often to take pictures / log to database
-    "sleep_interval_sec": 300,
+    # How often to take pictures
+    "camera_freq_seconds": 60 ** 2 * 2,
+    # How often to log temp reading
+    "sensor_freq_seconds": 60 * 10,
     # Time range for lights on / off
     "light_time": "800,2399",
     # Resolution for camera

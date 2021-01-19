@@ -71,7 +71,8 @@ def read_config():
 config_params = read_config()
 INCUBATOR_NAME = config_params['incubator_name']
 PICTURES_FOLDER = config_params['pictures_folder']
-SLEEP_INTERVAL_SEC = int(config_params['sleep_interval_sec'])
+CAMERA_FREQ_SECONDS = int(config_params['camera_freq_seconds'])
+SENSOR_FREQ_SECONDS = int(config_params['sensor_freq_seconds'])
 LIGHT_TIME = tuple(
     map(int, config_params.get('light_time', "800,2399").split(","))
 )
@@ -129,12 +130,16 @@ def get_incubator_id():
     # Check to see if incubator name exists in database, if not, create
     incubator_id = check_incubator_id()
     if not incubator_id:
-        with get_db_session() as session:
-            logger.info("Incubator ID not yet created... assigning new")
-            incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
-            session.add(incubator)
-            session.commit()
-            incubator_id = check_incubator_id()
+        try:
+            with get_db_session() as session:
+                logger.info("Incubator ID not yet created... assigning new")
+                incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
+                session.add(incubator)
+                session.commit()
+                incubator_id = check_incubator_id()
+        except Exception as e:
+            logger.error(e)
+            raise(Exception('Could not load incubator ID. Ensure name is unique!'))
     return incubator_id
 
 
@@ -173,7 +178,8 @@ def adjust_lights():
         os.system("gpio -g write 12 0")
 
 
-def write_to_database(incubator_id):
+def write_to_database(incubator_id) -> bool:
+    """Attempt to write to database, if not successful log failure."""
     record = schema.Sensor(
         incubator_id = incubator_id,
         time = datetime.datetime.now(),
@@ -181,11 +187,17 @@ def write_to_database(incubator_id):
         humidity = sensor.relative_humidity,
         light = int(is_lights_on()),
     )
-    with get_db_session() as session:
-        session.add(record)
-        session.commit()
-        logger.info(record)
-    return None
+    is_success = True
+    try:
+        with get_db_session() as session:
+            session.add(record)
+            session.commit()
+            logger.info(record)
+    except Exception as e:
+        logger.error(e)
+        logger.error('Failed to write to database, will attempt on next cycle!')
+        is_success = False
+    return is_success
 
 
 def main():
@@ -193,14 +205,21 @@ def main():
     validate_incubator_name()
     initialize_system()
     incubator_id = get_incubator_id()
+    sensor_time = time.time()
+    camera_time = time.time()
     while True:
         adjust_lights()
-        if is_lights_on():
+        camera_delta = (time.time() - camera_time)
+        sensor_delta = (time.time() - sensor_time)
+        if is_lights_on() and (camera_delta > CAMERA_FREQ_SECONDS):
             take_picture()
-        if sensor:
-            write_to_database(incubator_id)
-        time.sleep(SLEEP_INTERVAL_SEC)
-
+            camera_time += CAMERA_FREQ_SECONDS
+        if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
+            is_success = write_to_database(incubator_id)
+            if is_success:
+                sensor_time += SENSOR_FREQ_SECONDS
+        logger.info(f"System heartbeat: {datetime.datetime.now()}")
+        time.sleep(5)
 
 if __name__ == "__main__":
     main()
