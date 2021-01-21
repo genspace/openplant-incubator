@@ -91,8 +91,8 @@ def get_db_session():
     engine = create_engine(get_connection_string(), convert_unicode=True)
     connection = engine.connect()
     db_session = Session(
-        autocommit=True,
-    #    autoflush=True,
+        autocommit=False,
+        autoflush=True,
         bind=engine
     )
     yield db_session
