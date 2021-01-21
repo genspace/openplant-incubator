@@ -90,7 +90,11 @@ def get_db_session():
     """
     engine = create_engine(get_connection_string(), convert_unicode=True)
     connection = engine.connect()
-    db_session = Session(autocommit=False, autoflush=True, bind=engine)
+    db_session = Session(
+        autocommit=True,
+    #    autoflush=True,
+        bind=engine
+    )
     yield db_session
     db_session.close()
     connection.close()
@@ -171,10 +175,10 @@ def take_picture():
 
 def adjust_lights():
     if is_lights_on():
-        logger.info("Lights on")
+        # logger.info("Lights on")
         os.system("gpio -g write 12 1")
     else:
-        logger.info("Lights off")
+        # logger.info("Lights off")
         os.system("gpio -g write 12 0")
 
 
@@ -205,12 +209,12 @@ def main():
     validate_incubator_name()
     initialize_system()
     incubator_id = get_incubator_id()
-    sensor_time = time.time()
-    camera_time = time.time()
+    sensor_time = (time.time() - CAMERA_FREQ_SECONDS)
+    camera_time = (time.time() - SENSOR_FREQ_SECONDS)
     while True:
         adjust_lights()
-        camera_delta = (time.time() - camera_time) - CAMERA_FREQ_SECONDS
-        sensor_delta = (time.time() - sensor_time) - SENSOR_FREQ_SECONDS
+        camera_delta = (time.time() - camera_time)
+        sensor_delta = (time.time() - sensor_time)
         if is_lights_on() and (camera_delta > CAMERA_FREQ_SECONDS):
             take_picture()
             camera_time += CAMERA_FREQ_SECONDS
