@@ -23,7 +23,7 @@ class PostInstallCommand(distutils.cmd.Command):
 
 setuptools.setup(
     name="openplant",
-    version="0.1.03",
+    version="0.1.4",
     author="Genspace",
     description="Open Plant Incubator",
     long_description=long_description,
