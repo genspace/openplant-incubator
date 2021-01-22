@@ -209,8 +209,8 @@ def main():
     validate_incubator_name()
     initialize_system()
     incubator_id = get_incubator_id()
-    sensor_time = (time.time() - CAMERA_FREQ_SECONDS)
-    camera_time = (time.time() - SENSOR_FREQ_SECONDS)
+    camera_time = (time.time() - CAMERA_FREQ_SECONDS)
+    sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
     while True:
         adjust_lights()
         camera_delta = (time.time() - camera_time)
