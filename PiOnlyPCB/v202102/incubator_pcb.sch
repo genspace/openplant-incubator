@@ -126,49 +126,49 @@ $EndComp
 $Comp
 L Connector:Conn_01x05_Female J3
 U 1 1 60217AB3
-P 8100 1650
-F 0 "J3" H 8127 1676 50  0000 L CNN
-F 1 "Conn_01x05_Female" H 8127 1585 50  0000 L CNN
-F 2 "v202102_OpenPlant:PWRCON_3M81-5" H 8100 1650 50  0001 C CNN
-F 3 "~" H 8100 1650 50  0001 C CNN
-	1    8100 1650
+P 8250 1600
+F 0 "J3" H 8277 1626 50  0000 L CNN
+F 1 "Conn_01x05_Female" H 8277 1535 50  0000 L CNN
+F 2 "v202102_OpenPlant:PWRCON_3M81-5" H 8250 1600 50  0001 C CNN
+F 3 "~" H 8250 1600 50  0001 C CNN
+	1    8250 1600
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR02
 U 1 1 60217B8E
-P 7800 2000
-F 0 "#PWR02" H 7800 1750 50  0001 C CNN
-F 1 "GND" H 7805 1827 50  0000 C CNN
-F 2 "" H 7800 2000 50  0001 C CNN
-F 3 "" H 7800 2000 50  0001 C CNN
-	1    7800 2000
+P 7950 1950
+F 0 "#PWR02" H 7950 1700 50  0001 C CNN
+F 1 "GND" H 7955 1777 50  0000 C CNN
+F 2 "" H 7950 1950 50  0001 C CNN
+F 3 "" H 7950 1950 50  0001 C CNN
+	1    7950 1950
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7800 2000 7800 1850
+	7950 1950 7950 1800
 Wire Wire Line
-	7800 1850 7900 1850
+	7950 1800 8050 1800
 Wire Wire Line
-	7800 1850 7800 1750
+	7950 1800 7950 1700
 Wire Wire Line
-	7800 1450 7900 1450
-Connection ~ 7800 1850
+	7950 1400 8050 1400
+Connection ~ 7950 1800
 Wire Wire Line
-	7800 1550 7900 1550
-Connection ~ 7800 1550
+	7950 1500 8050 1500
+Connection ~ 7950 1500
 Wire Wire Line
-	7800 1550 7800 1450
+	7950 1500 7950 1400
 Wire Wire Line
-	7900 1650 7800 1650
-Connection ~ 7800 1650
+	8050 1600 7950 1600
+Connection ~ 7950 1600
 Wire Wire Line
-	7800 1650 7800 1550
+	7950 1600 7950 1500
 Wire Wire Line
-	7800 1750 7900 1750
-Connection ~ 7800 1750
+	7950 1700 8050 1700
+Connection ~ 7950 1700
 Wire Wire Line
-	7800 1750 7800 1650
+	7950 1700 7950 1600
 $Sheet
 S 4500 3200 600  750 
 U 602264F6
@@ -509,8 +509,6 @@ Entry Wire Line
 	2650 5250 2750 5350
 Wire Wire Line
 	2050 5150 2650 5150
-Wire Wire Line
-	2050 5250 2650 5250
 Text Label 2350 5150 0    50   ~ 0
 IN1
 Text Label 2350 5250 0    50   ~ 0
@@ -606,6 +604,67 @@ Wire Wire Line
 Wire Wire Line
 	6850 1850 6850 1750
 Connection ~ 6850 1850
+Text GLabel 2200 3550 2    50   Input ~ 0
+ADL1
+Text GLabel 2200 3650 2    50   Input ~ 0
+ADL2
+Text GLabel 2200 3750 2    50   Input ~ 0
+ADL3
+Text GLabel 2200 5450 2    50   Input ~ 0
+ADL4
+Text GLabel 2200 5550 2    50   Input ~ 0
+ADL5
+Text GLabel 2200 5650 2    50   Input ~ 0
+ADL6
+Wire Wire Line
+	2050 3550 2200 3550
+Wire Wire Line
+	2050 3650 2200 3650
+Wire Wire Line
+	2050 3750 2200 3750
+Wire Wire Line
+	2050 5450 2200 5450
+Wire Wire Line
+	2050 5550 2200 5550
+Wire Wire Line
+	2050 5650 2200 5650
+Text GLabel 7700 2450 0    50   Input ~ 0
+ADL1
+Text GLabel 8500 2450 2    50   Input ~ 0
+ADL2
+Text GLabel 7700 2550 0    50   Input ~ 0
+ADL3
+Wire Wire Line
+	7850 2450 7700 2450
+Wire Wire Line
+	8350 2450 8500 2450
+Wire Wire Line
+	7850 2550 7700 2550
+Text GLabel 8500 2550 2    50   Input ~ 0
+ADL4
+Text GLabel 7700 2650 0    50   Input ~ 0
+ADL5
+Text GLabel 8500 2650 2    50   Input ~ 0
+ADL6
+Wire Wire Line
+	8350 2550 8500 2550
+Wire Wire Line
+	7850 2650 7700 2650
+Wire Wire Line
+	8350 2650 8500 2650
+$Comp
+L Connector_Generic:Conn_02x03_Odd_Even J8
+U 1 1 60439022
+P 8050 2550
+F 0 "J8" H 8100 2867 50  0000 C CNN
+F 1 "Conn_02x03_Odd_Even" H 8100 2776 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical" H 8050 2550 50  0001 C CNN
+F 3 "~" H 8050 2550 50  0001 C CNN
+	1    8050 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2050 5250 2650 5250
 Wire Bus Line
 	5400 2900 5400 6050
 Wire Bus Line
