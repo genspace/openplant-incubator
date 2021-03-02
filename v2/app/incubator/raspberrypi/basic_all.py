@@ -171,6 +171,7 @@ def take_picture():
         os.system(f"aws s3 cp {src_path} {dst_path}")
         logger.info(f"Uploaded picture to: {dst_path}")
         os.system(f"rm {src_path}")
+    return took_pic
 
 
 def adjust_lights():
@@ -215,14 +216,19 @@ def main():
         adjust_lights()
         camera_delta = (time.time() - camera_time)
         sensor_delta = (time.time() - sensor_time)
+        # take picture if necessary
         if (camera_delta > CAMERA_FREQ_SECONDS):
             camera_time += CAMERA_FREQ_SECONDS
             if is_lights_on():
-                take_picture()
+                took_pic = take_picture()
+                if not took_pic:
+                    camera_time = (time.time() - CAMERA_FREQ_SECONDS)
+        # log sensor data if necessary
         if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
+            sensor_time += SENSOR_FREQ_SECONDS
             is_success = write_to_database(incubator_id)
-            if is_success:
-                sensor_time += SENSOR_FREQ_SECONDS
+            if not is_success:
+                sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
         # logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
 
