@@ -215,9 +215,10 @@ def main():
         adjust_lights()
         camera_delta = (time.time() - camera_time)
         sensor_delta = (time.time() - sensor_time)
-        if is_lights_on() and (camera_delta > CAMERA_FREQ_SECONDS):
-            take_picture()
+        if (camera_delta > CAMERA_FREQ_SECONDS):
             camera_time += CAMERA_FREQ_SECONDS
+            if is_lights_on():
+                take_picture()
         if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
             is_success = write_to_database(incubator_id)
             if is_success:
