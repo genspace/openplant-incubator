@@ -205,7 +205,7 @@ def write_to_database(incubator_id) -> bool:
     return is_success
 
 
-def main():
+def main(max_retry=5):
     cowsay.tux("Let's incubate!")
     validate_incubator_name()
     initialize_system()
@@ -214,21 +214,25 @@ def main():
     sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
     while True:
         adjust_lights()
-        camera_delta = (time.time() - camera_time)
-        sensor_delta = (time.time() - sensor_time)
         # take picture if necessary
-        if (camera_delta > CAMERA_FREQ_SECONDS):
-            camera_time += CAMERA_FREQ_SECONDS
+        camera_delta = (time.time() - camera_time)
+        if ((camera_delta > CAMERA_FREQ_SECONDS) or (camera_retry > 0 and camera_retry < max_retry)):
             if is_lights_on():
-                took_pic = take_picture()
-                if not took_pic:
-                    camera_time = (time.time() - CAMERA_FREQ_SECONDS)
+                if take_picture():
+                    camera_time, camera_retry = (time.time(), 0)
+                else:
+                    camera_retry += 1
+                if camera_retry >= max_retry:
+                    camera_retry = 0
         # log sensor data if necessary
-        if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
-            sensor_time += SENSOR_FREQ_SECONDS
-            is_success = write_to_database(incubator_id)
-            if not is_success:
-                sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
+        sensor_delta = (time.time() - sensor_time)
+        if sensor and ((sensor_delta > SENSOR_FREQ_SECONDS) or (sensor_retry > 0 and sensor_retry < max_retry)):
+            if write_to_database(incubator_id):
+                sensor_time, sensor_retry = (time.time(), 0)
+            else:
+                sensor_retry += 1
+            if sensor_retry >= max_retry:
+                sensor_retry = 0
         # logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
 
