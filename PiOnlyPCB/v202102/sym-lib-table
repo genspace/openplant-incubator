@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name OpenPlantSymbols)(type Legacy)(uri ${KIPRJMOD}/OpenPlantSymbols.lib)(options "")(descr ""))
+  (lib (name pi_zero_w)(type Legacy)(uri ${KIPRJMOD}/pi_zero_w.lib)(options "")(descr ""))
+)
