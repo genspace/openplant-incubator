@@ -26,7 +26,6 @@ from incubator.raspberrypi.scripts import BASE_CONFIG
 from incubator.util import get_connection_string
 
 from contextlib import contextmanager
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 # Create library object using our Bus I2C port
@@ -43,7 +42,7 @@ except ValueError:
 try:
     i2c = busio.I2C(board.SCL, board.SDA)
     sensor = HTU21D(i2c)
-except ValueError as e:
+except ValueError:
     logger.error("I2C not enabled... will not log sensor values to database")
     pass
 
@@ -137,13 +136,14 @@ def get_incubator_id():
         try:
             with get_db_session() as session:
                 logger.info("Incubator ID not yet created... assigning new")
-                incubator = schema.Incubator(name=INCUBATOR_NAME, node=uuid.getnode())
+                incubator = schema.Incubator(
+                    name=INCUBATOR_NAME, node=uuid.getnode())
                 session.add(incubator)
                 session.commit()
                 incubator_id = check_incubator_id()
         except Exception as e:
             logger.error(e)
-            raise(Exception('Could not load incubator ID. Ensure name is unique!'))
+            raise(Exception('Cannot load incubator ID. Ensure unique name!'))
     return incubator_id
 
 
@@ -186,11 +186,11 @@ def adjust_lights():
 def write_to_database(incubator_id) -> bool:
     """Attempt to write to database, if not successful log failure."""
     record = schema.Sensor(
-        incubator_id = incubator_id,
-        time = datetime.datetime.now(),
-        temperature = sensor.temperature,
-        humidity = sensor.relative_humidity,
-        light = int(is_lights_on()),
+        incubator_id=incubator_id,
+        time=datetime.datetime.now(),
+        temperature=sensor.temperature,
+        humidity=sensor.relative_humidity,
+        light=int(is_lights_on()),
     )
     is_success = True
     try:
@@ -200,7 +200,7 @@ def write_to_database(incubator_id) -> bool:
             logger.info(record)
     except Exception as e:
         logger.error(e)
-        logger.error('Failed to write to database, will attempt on next cycle!')
+        logger.error('Failed to write to database, may retry.')
         is_success = False
     return is_success
 
@@ -212,29 +212,38 @@ def main(max_retry=5):
     incubator_id = get_incubator_id()
     camera_time = (time.time() - CAMERA_FREQ_SECONDS)
     sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
+    camera_retry, sensor_retry = 0, 0
+    picture_taken, sensor_logged = False, False
     while True:
         adjust_lights()
+
         # take picture if necessary
         camera_delta = (time.time() - camera_time)
-        if ((camera_delta > CAMERA_FREQ_SECONDS) or (camera_retry > 0 and camera_retry < max_retry)):
+        if camera_delta > CAMERA_FREQ_SECONDS:
+            picture_taken = False
+            camera_time = time.time()
+            camera_retry = 0
+        if not picture_taken and (0 <= camera_retry <= max_retry):
             if is_lights_on():
                 if take_picture():
-                    camera_time, camera_retry = (time.time(), 0)
+                    picture_taken = True
                 else:
                     camera_retry += 1
-                if camera_retry >= max_retry:
-                    camera_retry = 0
+
         # log sensor data if necessary
         sensor_delta = (time.time() - sensor_time)
-        if sensor and ((sensor_delta > SENSOR_FREQ_SECONDS) or (sensor_retry > 0 and sensor_retry < max_retry)):
+        if sensor_delta > SENSOR_FREQ_SECONDS:
+            sensor_logged = True
+            sensor_time = time.time()
+            sensor_retry = 0
+        if not sensor_logged and (0 < sensor_retry <= max_retry):
             if write_to_database(incubator_id):
-                sensor_time, sensor_retry = (time.time(), 0)
+                sensor_logged = True
             else:
                 sensor_retry += 1
-            if sensor_retry >= max_retry:
-                sensor_retry = 0
         # logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
+
 
 if __name__ == "__main__":
     main()
