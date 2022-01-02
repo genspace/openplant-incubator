@@ -233,10 +233,10 @@ def main(max_retry=5):
         # log sensor data if necessary
         sensor_delta = (time.time() - sensor_time)
         if sensor_delta > SENSOR_FREQ_SECONDS:
-            sensor_logged = True
+            sensor_logged = False
             sensor_time = time.time()
             sensor_retry = 0
-        if not sensor_logged and (0 < sensor_retry <= max_retry):
+        if not sensor_logged and (0 <= sensor_retry <= max_retry):
             if write_to_database(incubator_id):
                 sensor_logged = True
             else:
