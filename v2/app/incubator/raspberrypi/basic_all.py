@@ -222,6 +222,7 @@ def main(max_retry=5):
         if camera_delta > CAMERA_FREQ_SECONDS:
             picture_taken = False
             camera_time = time.time()
+            logger.info(f"camera_time reset to : {camera_time}")
             camera_retry = 0
         if not picture_taken and (0 <= camera_retry <= max_retry):
             if is_lights_on():
@@ -235,6 +236,7 @@ def main(max_retry=5):
         if sensor_delta > SENSOR_FREQ_SECONDS:
             sensor_logged = False
             sensor_time = time.time()
+            logger.info(f"sensor_time reset to : {sensor_time}")
             sensor_retry = 0
         if not sensor_logged and (0 <= sensor_retry <= max_retry):
             if write_to_database(incubator_id):
