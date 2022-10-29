@@ -1,0 +1,20 @@
+* Task list [2/2]
+- [X] lookup size limitations JLCPCB -- it seems up to 200mm x 200mm would be good
+- [X] Schematic [3/3]
+  - [X] mosfets
+  - [X] I2C
+  - [X] ATX
+- [X] PCB tasks [12/12]
+  - [X] copy shape from PiOnlyPCB V2
+  - [X] footprints for 12 pin 3.81mm connectors
+  - [X] ATX power distribution
+  - [X] ATX power-on switch
+  - [X] mosfets
+  - [X] I2C
+  - no additional copy of RPi header
+  - [X] multiple mounting holes with keepouts
+  - [X] silk screen additional labels
+  - [X] silk screen references
+  - [X] edge cuts
+  - [X] Open Plant logo / label
+  - [X] Flip over RPi connector
