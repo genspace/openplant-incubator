@@ -171,6 +171,7 @@ def take_picture():
         os.system(f"aws s3 cp {src_path} {dst_path}")
         logger.info(f"Uploaded picture to: {dst_path}")
         os.system(f"rm {src_path}")
+    return took_pic
 
 
 def adjust_lights():
@@ -204,7 +205,7 @@ def write_to_database(incubator_id) -> bool:
     return is_success
 
 
-def main():
+def main(max_retry=5):
     cowsay.tux("Let's incubate!")
     validate_incubator_name()
     initialize_system()
@@ -213,16 +214,25 @@ def main():
     sensor_time = (time.time() - SENSOR_FREQ_SECONDS)
     while True:
         adjust_lights()
+        # take picture if necessary
         camera_delta = (time.time() - camera_time)
-        sensor_delta = (time.time() - sensor_time)
-        if (camera_delta > CAMERA_FREQ_SECONDS):
-            camera_time += CAMERA_FREQ_SECONDS
+        if ((camera_delta > CAMERA_FREQ_SECONDS) or (camera_retry > 0 and camera_retry < max_retry)):
             if is_lights_on():
-                take_picture()
-        if sensor and (sensor_delta > SENSOR_FREQ_SECONDS):
-            is_success = write_to_database(incubator_id)
-            if is_success:
-                sensor_time += SENSOR_FREQ_SECONDS
+                if take_picture():
+                    camera_time, camera_retry = (time.time(), 0)
+                else:
+                    camera_retry += 1
+                if camera_retry >= max_retry:
+                    camera_retry = 0
+        # log sensor data if necessary
+        sensor_delta = (time.time() - sensor_time)
+        if sensor and ((sensor_delta > SENSOR_FREQ_SECONDS) or (sensor_retry > 0 and sensor_retry < max_retry)):
+            if write_to_database(incubator_id):
+                sensor_time, sensor_retry = (time.time(), 0)
+            else:
+                sensor_retry += 1
+            if sensor_retry >= max_retry:
+                sensor_retry = 0
         # logger.info(f"System heartbeat: {datetime.datetime.now()}")
         time.sleep(5)
 
