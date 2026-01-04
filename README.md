@@ -6,4 +6,6 @@ The code in this repository is open sourced and provides tools to develop a plan
 
 ToDo: Update this https://trello.com/b/W0jccEJs/welcome-to-the-project
 
+Complete block diagram is saved in the genspace/openplant google drive. See `Incubator functional block diagram`
+
 Please feel free to get in touch with the team.
