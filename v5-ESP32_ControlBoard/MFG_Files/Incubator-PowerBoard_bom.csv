@@ -1,0 +1,27 @@
+Component,Description,Part,References,Quantity Per PCB,Datasheet,Value,Footprint,MPN,Digikey_Part_Number
+1,ATX Power supply 24pins,ATX-24,J13,1,https://www.intel.com/content/dam/www/public/us/en/documents/guides/power-supply-design-guide-june.pdf#page=33,ATX-24,Molex_Mini-Fit_Jr_5569-24A2_2x12_P4.20mm_Horizontal,,
+2,CONN HDR 12POS 0.1 TIN PCB,Conn_01x12_Socket,J1,1,https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/937/Female_Headers.100_DS.pdf,Conn_01x12_Socket,PinSocket_1x12_P2.54mm_Vertical,PPTC121LFBN-RC,S6100-ND
+3,CONN HDR 16POS 0.1 TIN PCB,Conn_01x16_Socket,J2,1,https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/937/Female_Headers.100_DS.pdf,Conn_01x16_Socket,PinSocket_1x16_P2.54mm_Vertical,PPTC161LFBN-RC,S7014-ND
+4,"Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",Conn_02x10_Odd_Even,J11,1,~,Conn_02x10_Odd_Even,PinHeader_2x10_P2.54mm_Vertical,,
+5,CONN HEADER VERT 4POS 2.54MM,Conn_01x04_Pin,J3 J4 J5 J6 J10,5,https://www.we-online.com/components/products/datasheet/61300411121.pdf,OUT_FAN_1,PinHeader_1x04_P2.54mm_Vertical,61300411121,732-5317-ND
+6,CONN HEADER VERT 2POS 2.54MM,Conn_01x02_Pin,J8 J9 J12,3,https://www.we-online.com/components/products/datasheet/61300211121.pdf,PELTIER_1,PinHeader_1x02_P2.54mm_Vertical,61300211121,732-5315-ND
+7,MOSFET N-CH 30V 6A TSOT26,2N7002E_1,Q1 Q2 Q3 Q4 Q5,5,https://www.diodes.com/assets/Datasheets/DMG6402LVT.pdf,OUT_FAN_1,SOT-23-6,DMG6402LVT-7,DMG6402LVT-7DICT-ND
+8,RES 0 OHM JUMPER 1/10W 0603,R_US,R6 R7 R8,3,https://www.seielect.com/catalog/sei-rmcf_rmcp.pdf,0R,R_0603_1608Metric,RMCF0603ZT0R00,RMCF0603ZT0R00CT-ND
+9,Thick Film Resistors CRCW1210-IF 200 1K0 5% ET1 E3,R_US,R1 R2,2,https://www.vishay.com/doc?20024,1K,R_1210_3225Metric,CRCW12101K00JNEAIF,
+10,RES 10K OHM 5% 1/10W 0603,R_US,R3 R4 R5,3,https://www.seielect.com/catalog/sei-rmcf_rmcp.pdf,10K,R_0603_1608Metric,RMCF0603JT10K0,RMCF0603JT10K0CT-ND
+
+
+
+
+
+Component Groups:,12
+Component Count:,30
+Fitted Components:,25
+Number of PCBs:,1
+Total components:,25
+Schematic Version:,v01a
+Schematic Date:,2024-07-20
+PCB Variant:,default
+BoM Date:,2024-11-21T12:36:54-0500
+Schematic Source:,Incubator-PowerBoard.kicad_sch
+KiCad Version:,Eeschema 8.0.2
