@@ -53,3 +53,11 @@ v2/db.env
 dist/*
 *.egg-info
 >>>>>>> 734680c73235e67b40072fbdf403f1a9a47e9ca7
+
+
+# kicad
+**/*-backups/
+ControlBoard_ESP32/**/*.zip
+**/*-cache
+**/*.prl
+**/*.tmp
